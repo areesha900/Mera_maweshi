@@ -11,11 +11,6 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or their l
 
 > <img width="866" height="430" alt="Screenshot 2026-06-22 223114" src="https://github.com/user-attachments/assets/325278fa-dc00-42ec-8d56-84a10eeb0fe9" />
 
-
-| Splash Screen | Home Menu | Registration | Diagnosis |
-|---|---|---|---|
-| میرا مویشی logo | 3 big action buttons | Farmer details form | Symptom input |
-
 ---
 
 ## ✨ Features
