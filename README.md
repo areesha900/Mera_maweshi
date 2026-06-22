@@ -1,5 +1,5 @@
 
-# 🐄 Mera Maweshi — میرا مویشی
+# 🐄 Mera Maweshi - میرا مویشی
 
 > An AI-powered livestock disease diagnosis app for rural farmers in Pakistan.
 
@@ -77,42 +77,6 @@ Translate Response → Farmer's Language
 Display Diagnosis on App
 ```
 
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Python 3.10+
-- Node.js 18+
-- GPU with CUDA support (for model inference)
-
-### Clone the repo
-
-```bash
-git clone https://github.com/your-username/mera-maweshi.git
-cd mera-maweshi
-```
-
-### Run the research notebook
-
-```bash
-pip install transformers datasets peft accelerate bitsandbytes langdetect deep-translator gradio
-jupyter notebook model/VetLLM.ipynb
-```
-
-> ⚠️ The backend API and mobile app are currently under development.
-
----
-
-## 📊 Dataset
-
-We use the [Livestock Symptoms and Diseases dataset](https://www.kaggle.com/datasets/researcher1548/livestock-symptoms-and-diseases) from Kaggle.
-
-Each entry contains: `Animal`, `Age`, `Temperature`, `Symptom 1-3`, `Disease`
-
----
-
 ## 🛣️ Roadmap
 
 - [x] AI model fine-tuning (LoRA)
@@ -125,23 +89,3 @@ Each entry contains: `Animal`, `Age`, `Temperature`, `Symptom 1-3`, `Disease`
 - [ ] Offline mode
 - [ ] Farmer database & profile management
 
----
-
-## 👥 Team
-
-| Role | Name |
-|---|---|
-| Previous Researcher | *(last summer)* |
-| Current Team | *(your names here)* |
-| Supervisor | *(instructor name here)* |
-
----
-
-## 📄 License
-
-This project is for academic/research purposes under [your university name].
-
----
-
-*میرا مویشی — مویشیوں کی بیماریوں کی تشخیص کا منفرد نظام*
-*(Mera Maweshi — A unique system for livestock disease diagnosis)*
