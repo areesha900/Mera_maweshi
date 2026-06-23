@@ -74,15 +74,16 @@ Display Diagnosis on App
 
 We use the Livestock Symptoms and Diseases dataset from Kaggle as our primary training and knowledge base source.
 
+**Stats:**
+- 43,778 entries
+- 4 animals: cow, buffalo, sheep, goat
+- 5 diseases: Pneumonia, Lumpy Virus, Blackleg, Foot and Mouth, Anthrax
+- 
 Each entry contains: `Animal`, `Age`, `Temperature`, `Symptom 1-3`, `Disease`
-
-**Usage:**
-- Loaded into ChromaDB as a vector knowledge base for RAG
-- Used for QLoRA fine-tuning to adapt OpenChat 3.5 to veterinary Q&A style
 
 **Planned additions:**
 - FAO EMPRES-i disease records for Pakistan-specific diseases
-- Locally collected data in partnership with veterinary institutions
+- Locally collected data in partnership with veterinary institutions (e.g. UVAS Lahore)
 
 ---
 
