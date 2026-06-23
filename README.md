@@ -20,7 +20,6 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 - 🌐 **Multilingual** — English, Urdu
 - 🤖 **AI Diagnosis** — Fine-tuned LLM trained on livestock disease data
 - 💬 **Natural language input** — Farmer types or speaks symptoms in their language
-- 🎤 **Voice input** — Urdu speech-to-text for low-literacy users
 - 🔄 **Auto-translation** — Detects language, translates to English for model, translates response back
 - 📍 **Location-aware** — Collects Tehsil & Union Council for regional outbreak tracking
 - 🧠 **Conversation memory** — Remembers context within a session
