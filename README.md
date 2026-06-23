@@ -3,7 +3,7 @@
 
 > An AI-powered livestock disease diagnosis app for rural farmers in Pakistan.
 
-Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or their local language** and receive an AI-generated disease diagnosis — no vet visit required. Built for low-literacy users with large buttons, Urdu-first UI, and multilingual support.
+Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language** and receive an AI-generated disease diagnosis - no vet visit required. Built for low-literacy users with large buttons, Urdu-first UI, and multilingual support.
 
 ---
 
@@ -17,7 +17,7 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or their l
 
 ## ✨ Features
 
-- 🌐 **Multilingual** — English, Urdu, Punjabi, Sindhi, and more
+- 🌐 **Multilingual** — English, Urdu
 - 🤖 **AI Diagnosis** — Fine-tuned LLM trained on livestock disease data
 - 💬 **Natural language input** — Farmer types or speaks symptoms in their language
 - 🎤 **Voice input** — Urdu speech-to-text for low-literacy users
