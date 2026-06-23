@@ -9,16 +9,9 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or their l
 
 ## 📱 Screenshots
 
-### Previous
-> <img width="866" height="430" alt="Screenshot 2026-06-22 223114" src="https://github.com/user-attachments/assets/325278fa-dc00-42ec-8d56-84a10eeb0fe9" />
-
-### Updated
 <img width="725" height="457" alt="Screenshot 2026-06-23 125337" src="https://github.com/user-attachments/assets/c630c54d-a001-4cb8-b7d4-faddd6f6c0e1" />
 <img width="727" height="455" alt="Screenshot 2026-06-23 125347" src="https://github.com/user-attachments/assets/841c24ec-79a0-4a56-a12f-e883efe71ecb" />
 <img width="720" height="456" alt="Screenshot 2026-06-23 125406" src="https://github.com/user-attachments/assets/14946d24-c6a1-4fcc-8c14-88f35f451bd9" />
-
-
-
 
 ---
 
