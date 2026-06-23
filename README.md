@@ -67,6 +67,23 @@ Translate Response → Farmer's Language
       ↓
 Display Diagnosis on App
 ```
+
+---
+
+## 📊 Dataset
+
+We use the Livestock Symptoms and Diseases dataset from Kaggle as our primary training and knowledge base source.
+
+Each entry contains: `Animal`, `Age`, `Temperature`, `Symptom 1-3`, `Disease`
+
+**Usage:**
+- Loaded into ChromaDB as a vector knowledge base for RAG
+- Used for QLoRA fine-tuning to adapt OpenChat 3.5 to veterinary Q&A style
+
+**Planned additions:**
+- FAO EMPRES-i disease records for Pakistan-specific diseases
+- Locally collected data in partnership with veterinary institutions
+
 ---
 
 ## 🛣️ Roadmap
