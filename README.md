@@ -24,28 +24,14 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or their l
 
 ## ✨ Features
 
-- 🌐 **Multilingual** — Urdu-first, with support for Punjabi, Sindhi, and more
-- 🤖 **AI Diagnosis** — Fine-tuned LLM (OpenChat 3.5) trained on livestock disease data
-- 💬 **Natural language input** — Farmer types symptoms in plain Urdu
+- 🌐 **Multilingual** — English, Urdu, Punjabi, Sindhi, and more
+- 🤖 **AI Diagnosis** — Fine-tuned LLM trained on livestock disease data
+- 💬 **Natural language input** — Farmer types or speaks symptoms in their language
+- 🎤 **Voice input** — Urdu speech-to-text for low-literacy users
 - 🔄 **Auto-translation** — Detects language, translates to English for model, translates response back
 - 📍 **Location-aware** — Collects Tehsil & Union Council for regional outbreak tracking
 - 🧠 **Conversation memory** — Remembers context within a session
-
----
-
-## 🏗️ Project Structure
-
-```
-mera-maweshi/
-├── app/                  # React Native mobile app (in development)
-├── backend/              # FastAPI backend server (in development)
-├── model/
-│   ├── VetLLM.ipynb      # Researcher's fine-tuning notebook (last summer)
-│   └── animal_disease_dataset.csv
-├── docs/
-│   └── StepbyStepArchitectureGuide.pdf
-└── README.md
-```
+- 📶 **Offline-first** — Works with poor rural connectivity, syncs when internet return
 
 ---
 
@@ -62,6 +48,22 @@ mera-maweshi/
 | Translation | `deep_translator` (Google Translate) |
 | Database | Firebase / PostgreSQL |
 
+---
+ 
+## 🧠 Tech Stack
+ 
+| Layer | Technology | Purpose |
+|---|---|---|
+| Mobile App | React Native | Cross-platform Android/iOS app with RTL & Urdu support |
+| Backend API | FastAPI (Python) | REST API connecting the mobile app to the AI model |
+| LLM | Mistral 7B (QLoRA fine-tuned) | Core disease diagnosis model |
+| Fine-Tuning | QLoRA (4-bit quantization) | Memory-efficient fine-tuning on livestock disease data |
+| RAG / Vector DB | ChromaDB | Persistent vector search over the disease knowledge base |
+| Translation | Meta NLLB-200 + Google Translate fallback | Urdu, Punjabi, Sindhi — offline-first, cloud fallback |
+| Voice Input | Whisper (small) + Google STT fallback | Urdu speech-to-text for low-literacy users |
+| Database | Firebase Firestore | Farmer profiles, diagnosis history, offline sync |
+| Model Hosting | Modal.com | Serverless GPU — pay only per inference call |
+ 
 ---
 
 ## ⚙️ AI Pipeline
