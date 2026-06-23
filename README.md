@@ -34,21 +34,6 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or their l
 - 📶 **Offline-first** — Works with poor rural connectivity, syncs when internet return
 
 ---
-
-## 🧠 Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Mobile App | React Native / Flutter |
-| Backend API | FastAPI (Python) |
-| AI Model | OpenChat 3.5 (7B) + LoRA fine-tuning |
-| Quantization | 4-bit (BitsAndBytes) |
-| Vector Search | FAISS + SentenceTransformer |
-| Language Detection | `langdetect` |
-| Translation | `deep_translator` (Google Translate) |
-| Database | Firebase / PostgreSQL |
-
----
  
 ## 🧠 Tech Stack
  
@@ -56,33 +41,33 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or their l
 |---|---|---|
 | Mobile App | React Native | Cross-platform Android/iOS app with RTL & Urdu support |
 | Backend API | FastAPI (Python) | REST API connecting the mobile app to the AI model |
-| LLM | Mistral 7B (QLoRA fine-tuned) | Core disease diagnosis model |
-| Fine-Tuning | QLoRA (4-bit quantization) | Memory-efficient fine-tuning on livestock disease data |
-| RAG / Vector DB | ChromaDB | Persistent vector search over the disease knowledge base |
+| LLM | OpenChat 3.5 (QLoRA fine-tuned) | Core disease diagnosis model, consistent with prior research |
+| Fine-Tuning | LoRA + 4bit | Adapter-based fine-tuning on livestock disease data |
+| RAG | ChromaDB | Persistent vector search over the disease knowledge base |
 | Translation | Meta NLLB-200 + Google Translate fallback | Urdu, Punjabi, Sindhi — offline-first, cloud fallback |
 | Voice Input | Whisper (small) + Google STT fallback | Urdu speech-to-text for low-literacy users |
 | Database | Firebase Firestore | Farmer profiles, diagnosis history, offline sync |
-| Model Hosting | Modal.com | Serverless GPU — pay only per inference call |
  
 ---
 
 ## ⚙️ AI Pipeline
 
 ```
-Farmer Input (Urdu)
+Farmer Input (text or voice)
       ↓
 Language Detection
       ↓
-Translate → English
+Translate → English (NLLB-200 / Google Translate fallback)
       ↓
-FAISS Vector Search (disease knowledge base)
+ChromaDB Vector Search (disease knowledge base)
       ↓
-LLM Inference (fine-tuned OpenChat 3.5)
+LLM Inference (openchat 3.5, QLoRA fine-tuned)
       ↓
 Translate Response → Farmer's Language
       ↓
 Display Diagnosis on App
 ```
+---
 
 ## 🛣️ Roadmap
 
