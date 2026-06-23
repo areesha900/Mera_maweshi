@@ -78,8 +78,7 @@ We use the Livestock Symptoms and Diseases dataset from Kaggle as our primary tr
 - 43,778 entries
 - 4 animals: cow, buffalo, sheep, goat
 - 5 diseases: Pneumonia, Lumpy Virus, Blackleg, Foot and Mouth, Anthrax
-- 
-Each entry contains: `Animal`, `Age`, `Temperature`, `Symptom 1-3`, `Disease`
+- Each entry contains: `Animal`, `Age`, `Temperature`, `Symptom 1-3`, `Disease`
 
 **Planned additions:**
 - FAO EMPRES-i disease records for Pakistan-specific diseases
