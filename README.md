@@ -72,7 +72,7 @@ Display Diagnosis + Confidence Score + First-Aid Advice
 
 We currently have 2 datasets available:
 
-### 1. Maweshi raw dataset:
+#### 1. Maweshi raw dataset:
 A dataset of **810 real veterinary case records** collected from Pakistan, forming the core of our RAG knowledge base and fine-tuning pipeline.
 
 **Stats:**
@@ -96,8 +96,7 @@ A dataset of **810 real veterinary case records** collected from Pakistan, formi
 | + 29 more diseases | ... |
 
 
-### 2. Livestock Dataset
-Used for additional fine-tuning coverage across common diseases.
+#### 2. Kaggle Dataset
 
 **Stats:**
 - 43,778 entries
