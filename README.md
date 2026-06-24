@@ -9,9 +9,21 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 
 ## 📱 Screenshots
 
+### Initial
+
 <img width="725" height="457" alt="Screenshot 2026-06-23 125337" src="https://github.com/user-attachments/assets/c630c54d-a001-4cb8-b7d4-faddd6f6c0e1" />
 <img width="727" height="455" alt="Screenshot 2026-06-23 125347" src="https://github.com/user-attachments/assets/841c24ec-79a0-4a56-a12f-e883efe71ecb" />
 <img width="720" height="456" alt="Screenshot 2026-06-23 125406" src="https://github.com/user-attachments/assets/14946d24-c6a1-4fcc-8c14-88f35f451bd9" />
+
+###Updated
+
+<img width="242" height="449" alt="image" src="https://github.com/user-attachments/assets/482073fa-7c6a-4c9a-a52c-93d1e626ed3d" />
+<img width="241" height="461" alt="image" src="https://github.com/user-attachments/assets/47f9af1b-2133-4765-b46d-2365d1c60e8b" />
+<img width="236" height="455" alt="image" src="https://github.com/user-attachments/assets/5fd1109c-849a-458e-a952-878b4401eb74" />
+<img width="247" height="456" alt="image" src="https://github.com/user-attachments/assets/e30f055b-dd16-4a4c-b727-f58e290a43af" />
+<img width="247" height="461" alt="image" src="https://github.com/user-attachments/assets/a4a03a38-8797-4425-85a6-63870bade541" />
+<img width="244" height="456" alt="image" src="https://github.com/user-attachments/assets/73c1719a-c6d5-4922-8283-91bc63ff8e62" />
+<img width="245" height="458" alt="image" src="https://github.com/user-attachments/assets/7cb12b8c-7060-4580-853d-09bdf736dde5" />
 
 ---
 
