@@ -3,7 +3,7 @@
 
 > An AI-powered livestock disease diagnosis app for rural farmers in Pakistan.
 
-Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language** and receive an AI-generated disease diagnosis - no vet visit required. Built for low-literacy users with large buttons, Urdu-first UI, and multilingual support.
+Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language** and receive an AI-generated disease diagnosis - no vet visit required.
 
 ---
 
@@ -23,10 +23,11 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 
 - 🌐 **Multilingual** — English, Urdu
 - 🤖 **AI Diagnosis** — Fine-tuned LLM trained on livestock disease data
-- 💬 **Natural language input** — Farmer types or speaks symptoms in their language
+- - 🩺 **Symptom Picker** — Categorised tap-to-select symptoms (respiratory, digestive, skin, musculoskeletal, urinary, reproductive systems)
 - 🔄 **Auto-translation** — Detects language, translates to English for model, translates response back
 - 📍 **Location-aware** — Collects Tehsil & Union Council for regional outbreak tracking
 - 🧠 **Conversation memory** — Remembers context within a session
+- - 📋 **Diagnosis History** — Tracks past diagnoses with animal, date, and recovery status
 - 📶 **Offline-first** — Works with poor rural connectivity, syncs when internet return
 
 ---
@@ -37,10 +38,11 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 |---|---|---|
 | Mobile App | React Native | Cross-platform Android/iOS app with RTL & Urdu support |
 | Backend API | FastAPI (Python) | REST API connecting the mobile app to the AI model |
+| Hosting | Remote Server (Cloud) |  FastAPI + AI model hosted online so the app can reach it from anywhere |
 | LLM | OpenChat 3.5 (QLoRA fine-tuned) | Core disease diagnosis model, consistent with prior research |
 | Fine-Tuning | QLoRA (LoRA + 4-bit quantization) | Adapter-based fine-tuning on livestock disease data |
 | RAG | ChromaDB | Persistent vector search over the disease knowledge base |
-| Translation | Meta NLLB-200 + Google Translate fallback | Urdu, Punjabi, Sindhi — offline-first, cloud fallback |
+| Translation | Meta NLLB-200 + Google Translate fallback | Urdu — offline-first, cloud fallback |
 | Voice Input | Whisper (small) + Google STT fallback | Urdu speech-to-text for low-literacy users |
 | Database | Firebase Firestore | Farmer profiles, diagnosis history, offline sync |
  
@@ -49,7 +51,7 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 ## ⚙️ AI Pipeline
 
 ```
-Farmer Input (text or voice)
+Farmer Input (symptom tap)
       ↓
 Language Detection
       ↓
@@ -61,7 +63,7 @@ LLM Inference (openchat 3.5, QLoRA fine-tuned)
       ↓
 Translate Response → Farmer's Language
       ↓
-Display Diagnosis on App
+Display Diagnosis + Confidence Score + First-Aid Advice
 ```
 
 ---
@@ -77,8 +79,7 @@ We use the Livestock Symptoms and Diseases dataset from Kaggle as our primary tr
 - Each entry contains: `Animal`, `Age`, `Temperature`, `Symptom 1-3`, `Disease`
 
 **Planned additions:**
-- FAO EMPRES-i disease records for Pakistan-specific diseases
-- Locally collected data in partnership with veterinary institutions (e.g. UVAS Lahore)
+- Sir's database
 
 ---
 
@@ -90,6 +91,5 @@ We use the Livestock Symptoms and Diseases dataset from Kaggle as our primary tr
 - [ ] FastAPI backend server
 - [ ] React Native mobile app
 - [ ] Full RAG pipeline (ChromaDB)
-- [ ] Voice input (Whisper)
 - [ ] Offline mode
 - [ ] Farmer database & profile management (Firebase Firestore)
