@@ -70,16 +70,40 @@ Display Diagnosis + Confidence Score + First-Aid Advice
 
 ## 📊 Dataset
 
-We use the Livestock Symptoms and Diseases dataset from Kaggle as our primary training and knowledge base source.
+We currently have 2 datasets available:
+
+### 1. Maweshi raw dataset:
+A dataset of **810 real veterinary case records** collected from Pakistan, forming the core of our RAG knowledge base and fine-tuning pipeline.
+
+**Stats:**
+- 810 clinical cases across 4 animals: Goat (292), Buffalo (213), Cattle (201), Sheep (104)
+- 37 diseases — including Worm Infestation, Theileriosis, Mastitis, FMD, Haemorrhagic Septicaemia, Tick Infestation, and more
+- 81 symptom columns per case, scored as `0` (absent), `0.3` (mild), or `0.9` (strong)
+- Each record includes: `Animal`, `Sex`, `Age Range`, `Breed`, `Report Date`, symptoms, `Disease ID`, `Disease Name`
+
+**Top diseases by case count:**
+
+| Disease | Cases |
+|---|---|
+| Worm Infestation | 132 |
+| Pyrexia / Infection / Inflammation | 85 |
+| Theileriosis | 68 |
+| Mastitis | 68 |
+| Foot and Mouth Disease (FMD) | 56 |
+| Upper Respiratory Tract Infection | 47 |
+| Haemorrhagic Septicaemia | 42 |
+| Tick Infestation | 32 |
+| + 29 more diseases | ... |
+
+
+### 2. Livestock Dataset
+Used for additional fine-tuning coverage across common diseases.
 
 **Stats:**
 - 43,778 entries
 - 4 animals: cow, buffalo, sheep, goat
 - 5 diseases: Pneumonia, Lumpy Virus, Blackleg, Foot and Mouth, Anthrax
-- Each entry contains: `Animal`, `Age`, `Temperature`, `Symptom 1-3`, `Disease`
-
-**Planned additions:**
-- Sir's database
+- Each entry contains: `Animal`, `Age`, `Temperature`, `Symptom 1–3`, `Disease`
 
 ---
 
