@@ -98,5 +98,4 @@ We currently have 2 datasets available:
 - [ ] FastAPI backend server
 - [ ] React Native mobile app
 - [ ] Full RAG pipeline (ChromaDB)
-- [ ] Offline mode
 - [ ] Farmer database & profile management (Firebase Firestore)
