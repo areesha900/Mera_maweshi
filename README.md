@@ -42,7 +42,7 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 | LLM | OpenChat 3.5 (QLoRA fine-tuned) | Core disease diagnosis model, consistent with prior research |
 | Fine-Tuning | QLoRA (LoRA + 4-bit quantization) | Adapter-based fine-tuning on livestock disease data |
 | RAG | ChromaDB | Persistent vector search over the disease knowledge base |
-| Translation | Meta NLLB-200 + Google Translate fallback | Urdu — offline-first, cloud fallback |
+| Translation | Meta NLLB-200 + Google Translate fallback | Urdu - offline-first, cloud fallback |
 | Database | Firebase Firestore | Farmer profiles, diagnosis history, offline sync |
  
 ---
