@@ -7,18 +7,6 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 
 ---
 
-## 📱 Mockups
-
-<img width="242" height="449" alt="image" src="https://github.com/user-attachments/assets/482073fa-7c6a-4c9a-a52c-93d1e626ed3d" />
-<img width="241" height="461" alt="image" src="https://github.com/user-attachments/assets/47f9af1b-2133-4765-b46d-2365d1c60e8b" />
-<img width="236" height="455" alt="image" src="https://github.com/user-attachments/assets/5fd1109c-849a-458e-a952-878b4401eb74" />
-<img width="247" height="456" alt="image" src="https://github.com/user-attachments/assets/e30f055b-dd16-4a4c-b727-f58e290a43af" />
-<img width="247" height="461" alt="image" src="https://github.com/user-attachments/assets/a4a03a38-8797-4425-85a6-63870bade541" />
-<img width="244" height="456" alt="image" src="https://github.com/user-attachments/assets/73c1719a-c6d5-4922-8283-91bc63ff8e62" />
-<img width="245" height="458" alt="image" src="https://github.com/user-attachments/assets/7cb12b8c-7060-4580-853d-09bdf736dde5" />
-
----
-
 ## ✨ Features
 
 - 🌐 **Multilingual** — English and Urdu
@@ -29,6 +17,18 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 - 🧠 **Conversation memory** — Remembers context within a session
 - 📋 **Diagnosis History** — Tracks past diagnoses with animal, date, and recovery status
 - 📶 **Offline-first** — Works with poor rural connectivity, syncs when internet return
+
+---
+
+## 📱 Mockups
+
+<img width="242" height="449" alt="image" src="https://github.com/user-attachments/assets/482073fa-7c6a-4c9a-a52c-93d1e626ed3d" />
+<img width="241" height="461" alt="image" src="https://github.com/user-attachments/assets/47f9af1b-2133-4765-b46d-2365d1c60e8b" />
+<img width="236" height="455" alt="image" src="https://github.com/user-attachments/assets/5fd1109c-849a-458e-a952-878b4401eb74" />
+<img width="247" height="456" alt="image" src="https://github.com/user-attachments/assets/e30f055b-dd16-4a4c-b727-f58e290a43af" />
+<img width="247" height="461" alt="image" src="https://github.com/user-attachments/assets/a4a03a38-8797-4425-85a6-63870bade541" />
+<img width="244" height="456" alt="image" src="https://github.com/user-attachments/assets/73c1719a-c6d5-4922-8283-91bc63ff8e62" />
+<img width="245" height="458" alt="image" src="https://github.com/user-attachments/assets/7cb12b8c-7060-4580-853d-09bdf736dde5" />
 
 ---
  
@@ -43,7 +43,6 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 | Fine-Tuning | QLoRA (LoRA + 4-bit quantization) | Adapter-based fine-tuning on livestock disease data |
 | RAG | ChromaDB | Persistent vector search over the disease knowledge base |
 | Translation | Meta NLLB-200 + Google Translate fallback | Urdu — offline-first, cloud fallback |
-| Voice Input | Whisper (small) + Google STT fallback | Urdu speech-to-text for low-literacy users |
 | Database | Firebase Firestore | Farmer profiles, diagnosis history, offline sync |
  
 ---
