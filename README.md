@@ -74,12 +74,12 @@ Display Diagnosis + Confidence Score + First-Aid Advice
 - 810 clinical cases
 - 4 animals: Goat (292), Buffalo (213), Cattle (201), Sheep (104)
 - 37 diseases: including Worm Infestation(132), Pyrexia(85), Theileriosis(68), Mastitis(68), FMD(56), Haemorrhagic Septicaemia, and more
-- 81 symptom columns per case: scored as `0` (absent), `0.3` (mild), or `0.9` (strong)
+- 81 symptom columns per case: scored as `0` (absent), `0.3` (mild), `0.9` (strong)
 - Each entry includes: `Animal`, `Sex`, `Age Range`, `Breed`, `Report Date`, `Symptoms`, `Disease ID`, `Disease Name`
 
 #### Processed Maweshi Dataset:
 
-- 84 symtoms : 81 + 3 (cough, fever, diarrhoea distribution into mild and severe each) -> all binary
+- 84 symptoms : 81 + 3 (cough, fever, diarrhoea distribution into mild and severe each) -> all binary
 - Each entry includes: `Animal`, `Sex`, `Age Range`, `Symptoms`, `Disease Name`
 
 ---
