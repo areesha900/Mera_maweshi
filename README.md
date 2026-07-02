@@ -83,9 +83,6 @@ We currently have 2 datasets available:
 
 - 43,778 entries
 - 4 animals: cow, buffalo, sheep, goat
-- 5 diseases: Pneumonia, Lumpy Virus, Blackleg, Foot and Mouth, Anthrax
-- 3 symptoms per case
-- Each entry contains: `Animal`, `Age`, `Temperature`, `Symptom`, `Disease`
 
 ---
 
