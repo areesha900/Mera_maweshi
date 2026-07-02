@@ -69,20 +69,11 @@ Display Diagnosis + Confidence Score + First-Aid Advice
 
 ## 📊 Dataset
 
-We currently have 2 datasets available:
-
-#### 1. Maweshi raw dataset:
-
 - 810 clinical cases
 - 4 animals: Goat (292), Buffalo (213), Cattle (201), Sheep (104)
 - 37 diseases: including Worm Infestation(132), Pyrexia(85), Theileriosis(68), Mastitis(68), FMD(56), Haemorrhagic Septicaemia, and more
 - 81 symptom columns per case: scored as `0` (absent), `0.3` (mild), or `0.9` (strong)
 - Each entry includes: `Animal`, `Sex`, `Age Range`, `Breed`, `Report Date`, `Symptoms`, `Disease ID`, `Disease Name`
-
-#### 2. Kaggle Dataset
-
-- 43,778 entries
-- 4 animals: cow, buffalo, sheep, goat
 
 ---
 
