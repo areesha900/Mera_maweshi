@@ -89,7 +89,7 @@ Display Diagnosis + Confidence Score + First-Aid Advice
 - [x] Language detection & translation pipeline
 - [x] Urdu UI mockups
 - [x] React Native mobile app
-- [ ] FastAPI backend server
+- [x] FastAPI backend server
 - [ ] AI model fine-tuning (QLoRA)
 - [ ] Full RAG pipeline (ChromaDB)
 - [ ] Farmer database & profile management (Firebase Firestore)
