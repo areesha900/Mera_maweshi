@@ -11,7 +11,7 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 
 - 🌐 **Multilingual** — English and Urdu
 - 🤖 **AI Diagnosis** — Fine-tuned LLM trained on livestock disease data
-- 🩺 **Symptom Picker** — Tap-to-select symptoms (respiratory, digestive, skin, musculoskeletal, urinary, reproductive systems)
+- 🩺 **Symptom Picker** — Tap-to-select symptoms (respiratory, digestive, skin, musculoskeletal, urinary systems etc)
 - 🔄 **Auto-translation** — Detects language, translates to English for model, translates response back
 - 📍 **Location-aware** — Collects Province, District & Tehsil for regional outbreak tracking
 - 🧠 **Conversation memory** — Remembers context within a session
