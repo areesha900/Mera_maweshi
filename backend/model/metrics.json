@@ -1,0 +1,15 @@
+{
+  "holdout_results": {
+    "random_forest": {
+      "accuracy": 0.9627,
+      "f1_weighted": 0.9632
+    },
+    "knn": {
+      "accuracy": 0.8447,
+      "f1_weighted": 0.8282
+    }
+  },
+  "chosen_model": "random_forest",
+  "n_train": 810,
+  "n_classes": 37
+}
