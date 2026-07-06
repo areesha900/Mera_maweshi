@@ -37,14 +37,12 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 | Layer | Technology | Purpose |
 |---|---|---|
 | Mobile App | React Native (Expo Router) | Cross-platform Android/iOS app with RTL & Urdu support |
-| Backend API | FastAPI (Python) | REST API connecting the mobile app to the AI model |
-| Hosting | Remote Server (Cloud) |  FastAPI + AI model hosted online so the app can reach it from anywhere |
-| LLM | OpenChat 3.5 (QLoRA fine-tuned) | Core disease diagnosis model, consistent with prior research |
-| Fine-Tuning | QLoRA (LoRA + 4-bit quantization) | Adapter-based fine-tuning on livestock disease data |
-| RAG | ChromaDB | Persistent vector search over the disease knowledge base |
-| Translation | Meta NLLB-200 + Google Translate fallback | Urdu - offline-first, cloud fallback |
-| Database | Firebase Firestore | Farmer profiles, diagnosis history, offline sync |
- 
+| Backend API | FastAPI (Python) | REST API connecting the mobile app to both diagnosis sources |
+| Trained Model | scikit-learn pipeline | Classifier trained on the Maweshi dataset (animal, sex, age, symptoms → disease) |
+| LLM | Groq API — Llama 3.3 70B Versatile | Independent diagnosis for comparison against the trained model |
+| Hosting | Render | FastAPI + trained model hosted online so the app can reach it from anywhere |
+| Database *(in progress)* | Firebase Firestore | Farmer profiles, animal records, diagnosis history |
+
 ---
 
 ## ⚙️ AI Pipeline
