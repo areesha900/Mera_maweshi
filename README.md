@@ -36,7 +36,7 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
  
 | Layer | Technology | Purpose |
 |---|---|---|
-| Mobile App | React Native | Cross-platform Android/iOS app with RTL & Urdu support |
+| Mobile App | React Native (Expo Router) | Cross-platform Android/iOS app with RTL & Urdu support |
 | Backend API | FastAPI (Python) | REST API connecting the mobile app to the AI model |
 | Hosting | Remote Server (Cloud) |  FastAPI + AI model hosted online so the app can reach it from anywhere |
 | LLM | OpenChat 3.5 (QLoRA fine-tuned) | Core disease diagnosis model, consistent with prior research |
