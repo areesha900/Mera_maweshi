@@ -16,8 +16,7 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 - 📍 **Location-aware** — Collects Province, District & Tehsil for regional outbreak tracking
 - 🧠 **Conversation memory** — Remembers context within a session
 - 📋 **Diagnosis History** — Tracks past diagnoses with animal, date, and recovery status
-- 📶 **Offline-first** — Works with poor rural connectivity, syncs when internet return
-
+- 🏥 **Urgency Flagging** — Highlights when a diagnosis warrants immediate veterinary attention
 ---
 
 ## 📱 Mockups
