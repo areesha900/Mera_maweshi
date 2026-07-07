@@ -50,15 +50,9 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 ```
 Farmer Input (symptom tap)
       ↓
-Language Detection
-      ↓
-Translate → English (NLLB-200 / Google Translate fallback)
-      ↓
 ChromaDB Vector Search (disease knowledge base)
       ↓
-LLM Inference (openchat 3.5, QLoRA fine-tuned)
-      ↓
-Translate Response → Farmer's Language
+LLM Inference (LLAMA 3.3 7-B Versatile)
       ↓
 Display Diagnosis + Confidence Score + First-Aid Advice
 ```
