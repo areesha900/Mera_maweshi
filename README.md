@@ -84,7 +84,6 @@ Display Diagnosis + Confidence Score + First-Aid Advice
 
 ## 🛣️ Roadmap
 
-- [x] Language detection & translation pipeline
 - [x] Urdu UI mockups
 - [x] React Native mobile app
 - [x] FastAPI backend server
