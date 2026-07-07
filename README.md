@@ -78,7 +78,7 @@ Display Diagnosis + Confidence Score + First-Aid Advice
 
 ## 🛣️ Roadmap
 
-- [x] Urdu UI mockups
+- [x] UI mockups (English and Urdu)
 - [x] React Native mobile app
 - [x] FastAPI backend server
 - [x] AI model
