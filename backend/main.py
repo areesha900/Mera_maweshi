@@ -9,6 +9,7 @@ Requires:
 """
 import json
 import os
+import re
 from pathlib import Path
 from typing import List, Optional
 import joblib
@@ -104,8 +105,46 @@ def run_trained_model(req: DiagnoseRequest) -> DiagnosisResult:
         differential=[
             {"disease_en": d, "disease_ur": get_reference(d)["ur"], "confidence": float(c)}
             for d, c in zip(top_diseases, top_confidences)
-],
+        ],
     )
+
+
+# --- disease vocabulary (keeps LLM output aligned to the model's label set) ---
+def get_disease_vocabulary() -> List[str]:
+    if label_encoder is None:
+        return []
+    return list(label_encoder.classes_)
+
+
+# --- Urdu script validation ---
+# Urdu uses the Arabic script block. If the LLM drifts into English,
+# Roman Urdu, or another language, this ratio will fall off a cliff.
+URDU_SCRIPT_RE = re.compile(r"[\u0600-\u06FF\u0750-\u077F]")
+
+
+def is_valid_urdu(text: str, min_ratio: float = 0.6) -> bool:
+    """Check that at least `min_ratio` of non-space chars are Urdu/Arabic script."""
+    if not text or not text.strip():
+        return False
+    stripped = text.replace(" ", "")
+    if not stripped:
+        return False
+    urdu_chars = len(URDU_SCRIPT_RE.findall(stripped))
+    return (urdu_chars / len(stripped)) >= min_ratio
+
+
+def validate_urdu_fields(parsed: dict) -> List[str]:
+    """Returns a list of field names that failed Urdu validation."""
+    bad_fields = []
+    if not is_valid_urdu(parsed.get("disease_ur", "")):
+        bad_fields.append("disease_ur")
+    if parsed.get("reasoning_ur") and not is_valid_urdu(parsed["reasoning_ur"]):
+        bad_fields.append("reasoning_ur")
+    for step in parsed.get("first_aid_ur", []):
+        if not is_valid_urdu(step):
+            bad_fields.append("first_aid_ur")
+            break
+    return bad_fields
 
 
 # --- LLM ---
@@ -113,48 +152,137 @@ LLM_SYSTEM_PROMPT = """You are a veterinary triage assistant helping smallholder
 diagnose livestock illness from reported symptoms. You are NOT a replacement for a vet visit for \
 serious or ambiguous cases.
 
+You will be given the predictions of a trained statistical model as a reference. This model was \
+trained on real veterinary case data for Pakistani livestock, so treat its top prediction as a \
+strong prior. Only diverge from it if the reported symptoms clearly point elsewhere — and if you do, \
+say why in reasoning_en.
+
+IMPORTANT: "disease_en" MUST be chosen exactly (same spelling/casing) from this fixed list of \
+diseases the system recognizes (both in English and Urdu)— do not invent a name outside this list:
+{disease_list}
+
+LANGUAGE RULES FOR ALL "_ur" FIELDS (disease_ur, reasoning_ur, first_aid_ur):
+- Write ONLY in Urdu, using the Urdu/Arabic script (اردو رسم الخط).
+- Do NOT use Roman Urdu (Urdu written in Latin letters).
+- Do NOT use Arabic, Persian, Pashto, Hindi, or any other language.
+- Do NOT mix English words into the Urdu text, including technical terms — translate them into \
+their common Urdu equivalent used by Pakistani farmers/vets (e.g. use "بخار" not "fever").
+- Every "_ur" field must be understandable to an Urdu-reading farmer in Pakistan with zero English.
+
 Respond with ONLY a single JSON object, no other text, no markdown fences, matching exactly this shape:
-{
-  "disease_en": "string, most likely disease/condition name in English",
-  "disease_ur": "string, the disease name in Urdu",
+{{
+  "disease_en": "string, must be one of the diseases listed above",
+  "disease_ur": "string, disease name written in Urdu script only",
   "confidence": integer 0-100,
   "serious": boolean, true if this warrants urgent vet attention,
   "reasoning_en": "one to two sentence explanation of why, in English",
-  "reasoning_ur": "the same explanation translated into Urdu",
+  "reasoning_ur": "the same explanation in Urdu script only, no English or Roman Urdu",
   "first_aid_en": ["short actionable first aid step", "..."],
-  "first_aid_ur": ["same steps translated to Urdu", "..."]
-}
+  "first_aid_ur": ["same steps in Urdu script only, no English or Roman Urdu", "..."]
+}}
 Keep first_aid lists to 3-4 concise, practical steps a farmer without medical training can follow \
 before reaching a vet. Always include contacting a vet as a step for serious conditions."""
 
 
-def run_llm(req: DiagnoseRequest) -> DiagnosisResult:
+
+# LLM_SYSTEM_PROMPT = """You are a veterinary triage assistant helping smallholder farmers in Pakistan \
+# diagnose livestock illness from reported symptoms. You are NOT a replacement for a vet visit for \
+# serious or ambiguous cases.
+
+# Respond with ONLY a single JSON object, no other text, no markdown fences, matching exactly this shape:
+# {
+#   "disease_en": "string, most likely disease/condition name in English",
+#   "disease_ur": "string, the disease name in Urdu",
+#   "confidence": integer 0-100,
+#   "serious": boolean, true if this warrants urgent vet attention,
+#   "reasoning_en": "one to two sentence explanation of why, in English",
+#   "reasoning_ur": "the same explanation translated into Urdu",
+#   "first_aid_en": ["short actionable first aid step", "..."],
+#   "first_aid_ur": ["same steps translated to Urdu", "..."]
+# }
+# Keep first_aid lists to 3-4 concise, practical steps a farmer without medical training can follow \
+# before reaching a vet. Always include contacting a vet as a step for serious conditions."""
+
+
+def run_llm(req: DiagnoseRequest, model_result: Optional[DiagnosisResult] = None) -> DiagnosisResult:
     if groq_client is None:
         raise RuntimeError("GROQ_API_KEY not configured")
 
     symptom_text = ", ".join(s.replace("_", " ") for s in req.symptoms) or "none reported"
+
+    model_context = ""
+    if model_result is not None:
+        diff_lines = "\n".join(
+            f"  {i+1}. {d['disease_en']} ({d['confidence']:.1f}%)"
+            for i, d in enumerate(model_result.differential or [])
+        )
+        model_context = (
+            f"\nTrained model's top predictions for this case:\n{diff_lines}\n"
+            f"Its top pick was: {model_result.disease_en} "
+            f"(confidence {model_result.confidence}%).\n"
+        )
+
     user_prompt = (
         f"Animal: {req.animal}\nSex: {req.sex}\nAge range: {req.age}\n"
-        f"Reported symptoms: {symptom_text}\n\n"
+        f"Reported symptoms: {symptom_text}\n"
+        f"{model_context}\n"
         "Give your best diagnosis as the JSON object described."
     )
 
-    response = groq_client.chat.completions.create(
-        model=GROQ_MODEL_NAME,
-        max_tokens=800,
-        messages=[
-            {"role": "system", "content": LLM_SYSTEM_PROMPT},
-            {"role": "user", "content": user_prompt},
-        ],
-        response_format={"type": "json_object"},
-    )
+    disease_list = ", ".join(get_disease_vocabulary())
+    system_prompt = LLM_SYSTEM_PROMPT.format(disease_list=disease_list)
 
-    raw_text = response.choices[0].message.content.strip()
+    def call_groq(extra_reminder: str = "") -> dict:
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt + extra_reminder},
+        ]
+        response = groq_client.chat.completions.create(
+            model=GROQ_MODEL_NAME,
+            max_tokens=800,
+            temperature=0.2,  # lower temp for consistent, model-aligned output
+            messages=messages,
+            response_format={"type": "json_object"},
+        )
+        raw_text = response.choices[0].message.content.strip()
+        return json.loads(raw_text)
 
     try:
-        parsed = json.loads(raw_text)
+        parsed = call_groq()
     except json.JSONDecodeError as e:
         raise RuntimeError(f"LLM returned non-JSON output: {e}") from e
+
+    # First attempt failed Urdu validation → retry once with a sharper reminder
+    bad_fields = validate_urdu_fields(parsed)
+    if bad_fields:
+        try:
+            retry_prompt = (
+                "\n\nREMINDER: your previous attempt did not use pure Urdu script for "
+                f"these fields: {', '.join(set(bad_fields))}. Rewrite ALL _ur fields "
+                "in Urdu script only — no English, no Roman Urdu, no other language."
+            )
+            retried = call_groq(extra_reminder=retry_prompt)
+            parsed = retried
+            bad_fields = validate_urdu_fields(parsed)
+        except (json.JSONDecodeError, Exception):
+            pass  # keep original parsed/bad_fields, fall through to fallback below
+
+    # Still bad after retry → fall back to curated reference data instead of showing garbage
+    if bad_fields and model_result is not None:
+        ref = get_reference(model_result.disease_en)
+        if "disease_ur" in bad_fields:
+            parsed["disease_ur"] = ref["ur"]
+        if "first_aid_ur" in bad_fields:
+            parsed["first_aid_ur"] = ref["first_aid_ur"]
+        if "reasoning_ur" in bad_fields:
+            parsed["reasoning_ur"] = None  # no curated reasoning to fall back on — hide rather than show garbage
+
+    # Guardrail: if LLM ignores the closed vocabulary, snap it back to model's top pick
+    valid_diseases = set(get_disease_vocabulary())
+    if valid_diseases and parsed["disease_en"] not in valid_diseases:
+        if model_result is not None:
+            parsed["disease_en"] = model_result.disease_en
+            parsed["disease_ur"] = model_result.disease_ur
 
     return DiagnosisResult(
         source="llm",
@@ -169,7 +297,7 @@ def run_llm(req: DiagnoseRequest) -> DiagnosisResult:
     )
 
 
-# --- route ---
+# --- route: run model FIRST, then pass its result into the LLM call ---
 @app.post("/api/diagnose", response_model=DiagnoseResponse)
 def diagnose(req: DiagnoseRequest):
     if not req.symptoms:
@@ -178,14 +306,14 @@ def diagnose(req: DiagnoseRequest):
     result = DiagnoseResponse()
 
     try:
-        result.llm = run_llm(req)
+        result.model = run_trained_model(req)
     except Exception as e:  # noqa: BLE001 — surface any failure to the client, don't crash the other path
-        result.llm_error = str(e)
+        result.model_error = str(e)
 
     try:
-        result.model = run_trained_model(req)
+        result.llm = run_llm(req, model_result=result.model)
     except Exception as e:  # noqa: BLE001
-        result.model_error = str(e)
+        result.llm_error = str(e)
 
     if result.llm is None and result.model is None:
         raise HTTPException(500, f"Both diagnosis paths failed: {result.llm_error} | {result.model_error}")

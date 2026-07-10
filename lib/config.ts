@@ -5,4 +5,5 @@
 // - Deployed backend: your hosted URL, e.g. https://mera-maweshi-api.onrender.com
 
 // export const API_BASE_URL = 'http://10.130.115.56:8000';
-export const API_BASE_URL = 'http://192.168.184.238:8000';
+// export const API_BASE_URL = 'http://192.168.184.238:8000';
+export const API_BASE_URL = 'https://mera-maweshi.onrender.com';

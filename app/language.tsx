@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { UrduText } from '../components/UrduText';
 
 export default function LanguageScreen() {
   const [selected, setSelected] = useState<'en' | 'ur'>('en');
@@ -9,11 +10,11 @@ export default function LanguageScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
-        <Text style={styles.topbarText}>زبان منتخب کریں</Text>
+        <UrduText style={styles.topbarText}>زبان منتخب کریں</UrduText>
       </View>
 
       <View style={styles.body}>
-        <Text style={styles.prompt}>اپنی زبان چنیں</Text>
+        <UrduText style={styles.prompt}>اپنی زبان چنیں</UrduText>
 
         <TouchableOpacity
           style={[styles.option, selected === 'en' && styles.optionSelected]}
@@ -34,7 +35,7 @@ export default function LanguageScreen() {
           <Text style={styles.flag}>🇵🇰</Text>
           <View style={styles.langInfo}>
             <Text style={styles.langName}>Urdu</Text>
-            <Text style={styles.langNative}>اردو</Text>
+            <UrduText style={styles.langNative}>اردو</UrduText>
           </View>
           {selected === 'ur' && <Text style={styles.check}>✓</Text>}
         </TouchableOpacity>
@@ -43,9 +44,9 @@ export default function LanguageScreen() {
           style={styles.btn}
           onPress={() => router.replace({ pathname: '/home', params: { lang: selected } })}
         >
-          <Text style={styles.btnText}>
+          <UrduText isUrdu={selected === 'ur'} style={styles.btnText}>
             {selected === 'ur' ? 'آگے بڑھیں' : 'Continue'}
-          </Text>
+          </UrduText>
         </TouchableOpacity>
       </View>
     </View>

@@ -1,8 +1,27 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { UrduText } from '../components/UrduText';
 import { DiagnoseResponse, DiagnosisResult, fetchDiagnosis } from '../lib/diagnosisApi';
 import { SYMPTOM_CATEGORIES } from '../lib/symptomsData';
+
+// Backend/LLM text can occasionally glue scripts together with no space
+// (e.g. a stray run of Cyrillic/Devanagari fused to Urdu). RN's <Text> can't
+// break mid-word, so one long unbroken run can force a card wider than its
+// container. This inserts an invisible zero-width space every `maxRun`
+// characters inside any "word" longer than that, so it always has a place
+// to wrap -- it doesn't change what's displayed, only where it can break.
+function wrapLongTokens(text?: string | null, maxRun = 18): string {
+  if (!text) return text ?? '';
+  return text
+    .split(' ')
+    .map(word =>
+      word.length > maxRun
+        ? word.replace(new RegExp(`(.{${maxRun}})`, 'g'), '$1\u200B')
+        : word
+    )
+    .join(' ');
+}
 
 export default function ResultScreen() {
   const router = useRouter();
@@ -70,13 +89,13 @@ export default function ResultScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
-        <Text style={styles.topbarText}>{t.title}</Text>
+        <UrduText isUrdu={isUrdu} style={styles.topbarText}>{t.title}</UrduText>
       </View>
 
       {loading && (
         <View style={styles.centerFill}>
           <ActivityIndicator size="large" color="#2d6a2d" />
-          <Text style={styles.loadingText}>{t.loading}</Text>
+          <UrduText isUrdu={isUrdu} style={styles.loadingText}>{t.loading}</UrduText>
         </View>
       )}
 
@@ -86,10 +105,10 @@ export default function ResultScreen() {
             <View style={styles.errorIconWrap}>
               <Text style={styles.errorIcon}>⚠️</Text>
             </View>
-            <Text style={styles.errorTitle}>{t.errorTitle}</Text>
+            <UrduText isUrdu={isUrdu} style={styles.errorTitle}>{t.errorTitle}</UrduText>
             <Text style={styles.errorText}>{error}</Text>
             <TouchableOpacity style={styles.retryBtn} onPress={runDiagnosis} activeOpacity={0.8}>
-              <Text style={styles.retryBtnText}>{t.retry}</Text>
+              <UrduText isUrdu={isUrdu} style={styles.retryBtnText}>{t.retry}</UrduText>
             </TouchableOpacity>
           </View>
         </View>
@@ -103,7 +122,7 @@ export default function ResultScreen() {
               <View style={styles.agreeIconWrap}>
                 <Text style={styles.agreeIcon}>✓</Text>
               </View>
-              <Text style={styles.agreeText}>{t.agree}</Text>
+              <UrduText isUrdu={isUrdu} style={styles.agreeText}>{t.agree}</UrduText>
             </View>
           )}
 
@@ -129,11 +148,11 @@ export default function ResultScreen() {
 
           {/* Selected symptoms */}
           <View style={styles.adviceCard}>
-            <Text style={[styles.adviceTitle, isUrdu && styles.rtl]}>{t.symptomsLabel}</Text>
+            <UrduText isUrdu={isUrdu} style={[styles.adviceTitle, isUrdu && styles.rtl]}>{t.symptomsLabel}</UrduText>
             <View style={[styles.chips, isUrdu && styles.rowReverse]}>
               {symptomList.map(s => (
                 <View key={s} style={styles.chip}>
-                  <Text style={styles.chipText}>{symptomLabel(s)}</Text>
+                  <UrduText isUrdu={isUrdu} style={styles.chipText}>{symptomLabel(s)}</UrduText>
                 </View>
               ))}
             </View>
@@ -146,7 +165,7 @@ export default function ResultScreen() {
           {anySerious && (
             <View style={[styles.vetBanner, isUrdu && styles.rowReverse]}>
               <Text style={styles.vetIcon}>🏥</Text>
-              <Text style={[styles.vetText, isUrdu && styles.rtl]}>{t.vetMsg}</Text>
+              <UrduText isUrdu={isUrdu} style={[styles.vetText, isUrdu && styles.rtl]}>{t.vetMsg}</UrduText>
             </View>
           )}
 
@@ -156,7 +175,7 @@ export default function ResultScreen() {
             onPress={() => router.push({ pathname: '/symptoms', params: { lang, name } })}
             activeOpacity={0.8}
           >
-            <Text style={styles.newBtnText}>{t.newBtn}</Text>
+            <UrduText isUrdu={isUrdu} style={styles.newBtnText}>{t.newBtn}</UrduText>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -164,7 +183,7 @@ export default function ResultScreen() {
             onPress={() => router.push({ pathname: '/home', params: { lang, name } })}
             activeOpacity={0.8}
           >
-            <Text style={styles.homeBtnText}>{t.homeBtn}</Text>
+            <UrduText isUrdu={isUrdu} style={styles.homeBtnText}>{t.homeBtn}</UrduText>
           </TouchableOpacity>
 
           <View style={{ height: 60 }} />
@@ -188,41 +207,41 @@ function DiagnosisCard({
   return (
     <View style={[styles.diseaseCard, { borderLeftColor: accentColor }]}>
       <View style={[styles.cardLabelBadge, isUrdu && styles.alignEnd, { backgroundColor: accentColor + '18' }]}>
-        <Text style={[styles.diseaseLabel, { color: accentColor }]}>{label}</Text>
+        <UrduText isUrdu={isUrdu} style={[styles.diseaseLabel, { color: accentColor }]}>{label}</UrduText>
       </View>
 
       {!result ? (
-        <Text style={[styles.cardError, isUrdu && styles.rtl]}>{error || unavailableText}</Text>
+        <UrduText isUrdu={isUrdu} style={[styles.cardError, isUrdu && styles.rtl]}>{error || unavailableText}</UrduText>
       ) : (
         <>
-          <Text style={[styles.diseaseName, isUrdu && styles.rtl]}>
-            {isUrdu ? result.disease_ur : result.disease_en}
-          </Text>
-          {isUrdu && <Text style={styles.diseaseEn}>{result.disease_en}</Text>}
+          <UrduText isUrdu={isUrdu} style={[styles.diseaseName, isUrdu && styles.rtl]}>
+            {wrapLongTokens(isUrdu ? result.disease_ur : result.disease_en)}
+          </UrduText>
+          {isUrdu && <Text style={styles.diseaseEn}>{wrapLongTokens(result.disease_en)}</Text>}
 
           <View style={styles.confidenceRow}>
             <View style={styles.confBar}>
               <View style={[styles.confFill, { width: `${result.confidence}%`, backgroundColor: accentColor }]} />
             </View>
             <View style={[styles.confPill, { backgroundColor: accentColor }]}>
-              <Text style={styles.confLabel}>
+              <UrduText isUrdu={isUrdu} style={styles.confLabel}>
                 {result.confidence}{confSuffix}
-              </Text>
+              </UrduText>
             </View>
           </View>
 
           {(isUrdu ? result.reasoning_ur : result.reasoning_en) && (
-            <Text style={[styles.reasoning, isUrdu && styles.rtl]}>
-              {isUrdu ? result.reasoning_ur : result.reasoning_en}
-            </Text>
+            <UrduText isUrdu={isUrdu} style={[styles.reasoning, isUrdu && styles.rtl]}>
+              {wrapLongTokens(isUrdu ? result.reasoning_ur : result.reasoning_en)}
+            </UrduText>
           )}
 
           {result.differential && result.differential.length > 1 && (
             <View style={styles.differentialWrap}>
               {result.differential.slice(1).map(d => (
-                <Text key={d.disease_en} style={[styles.differentialText, isUrdu && styles.rtl]}>
-                  · {isUrdu ? d.disease_ur : d.disease_en} ({d.confidence.toFixed(0)}%)
-                </Text>
+                <UrduText key={d.disease_en} isUrdu={isUrdu} style={[styles.differentialText, isUrdu && styles.rtl]}>
+                  · {wrapLongTokens(isUrdu ? d.disease_ur : d.disease_en)} ({d.confidence.toFixed(0)}%)
+                </UrduText>
               ))}
             </View>
           )}
@@ -250,22 +269,22 @@ function FirstAidCard({
     <View style={styles.adviceCard}>
       <View style={[styles.miniAdviceHeader, isUrdu && styles.rowReverse]}>
         <Text style={styles.miniAdviceIcon}>🩺</Text>
-        <Text style={[styles.adviceTitle, isUrdu && styles.rtl, { marginBottom: 0 }]}>
+        <UrduText isUrdu={isUrdu} style={[styles.adviceTitle, isUrdu && styles.rtl, { marginBottom: 0 }]}>
           {isUrdu ? 'ابتدائی طبی امداد' : 'First Aid'}
-        </Text>
+        </UrduText>
       </View>
 
       {sections.map((s, idx) => (
         <View key={idx} style={idx > 0 ? styles.firstAidSection : undefined}>
           {sections.length > 1 && (
-            <Text style={[styles.firstAidSourceLabel, { color: s.color }, isUrdu && styles.rtl]}>
+            <UrduText isUrdu={isUrdu} style={[styles.firstAidSourceLabel, { color: s.color }, isUrdu && styles.rtl]}>
               {s.label}
-            </Text>
+            </UrduText>
           )}
           {(isUrdu ? s.result!.first_aid_ur : s.result!.first_aid_en).map((item, i) => (
             <View key={i} style={[styles.adviceItem, isUrdu && styles.adviceItemRtl]}>
               <View style={[styles.dot, { backgroundColor: s.color }]} />
-              <Text style={[styles.adviceTextSmall, isUrdu && styles.rtl]}>{item}</Text>
+              <UrduText isUrdu={isUrdu} style={[styles.adviceTextSmall, isUrdu && styles.rtl]}>{wrapLongTokens(item)}</UrduText>
             </View>
           ))}
         </View>
@@ -289,7 +308,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     elevation: 4,
   },
-  topbarText: { color: 'white', fontSize: 16, fontWeight: '600' },
+  topbarText: { color: 'white', fontSize: 14, fontWeight: '600' },
   body: { flex: 1, padding: 12 },
   rtl: { textAlign: 'right' },
 
@@ -374,16 +393,17 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#1b1b1b',
     marginBottom: 4,
+    flexShrink: 1,
   },
-  diseaseEn: { fontSize: 12, color: '#888', marginBottom: 10 },
+  diseaseEn: { fontSize: 12, color: '#888', marginBottom: 10, flexShrink: 1 },
   confidenceRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 8, marginBottom: 12 },
   confBar: { flex: 1, height: 5, backgroundColor: '#eee', borderRadius: 3, overflow: 'hidden' },
   confFill: { height: '100%', borderRadius: 3 },
   confPill: { borderRadius: 7, paddingVertical: 2, paddingHorizontal: 6 },
   confLabel: { fontSize: 9, fontWeight: '700', color: 'white' },
-  reasoning: { fontSize: 12, color: '#666', lineHeight: 17, marginBottom: 10, fontStyle: 'italic' },
+  reasoning: { fontSize: 12, color: '#666', lineHeight: 17, marginBottom: 10, fontStyle: 'italic', flexShrink: 1 },
   differentialWrap: { marginBottom: 10 },
-  differentialText: { fontSize: 11, color: '#999', lineHeight: 16 },
+  differentialText: { fontSize: 11, color: '#999', lineHeight: 16, flexShrink: 1 },
 
   miniAdviceHeader: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 },
   miniAdviceIcon: { fontSize: 14 },

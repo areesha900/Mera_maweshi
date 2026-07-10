@@ -1,5 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { UrduText } from '../components/UrduText';
 
 const AGE_LABELS: Record<string, { en: string; ur: string }> = {
   'New Born': { en: 'New Born', ur: 'نوزائیدہ' },
@@ -29,7 +30,7 @@ export default function HistoryScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
-        <Text style={styles.topbarText}>{t.title}</Text>
+        <UrduText isUrdu={isUrdu} style={styles.topbarText}>{t.title}</UrduText>
       </View>
 
       <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
@@ -39,20 +40,20 @@ export default function HistoryScreen() {
               <Text style={styles.icon}>{item.icon}</Text>
             </View>
             <View style={styles.info}>
-              <Text style={[styles.disease, isUrdu && styles.rtl]}>
+              <UrduText isUrdu={isUrdu} style={[styles.disease, isUrdu && styles.rtl]}>
                 {isUrdu ? item.disease_ur : item.disease_en}
-              </Text>
-              <Text style={[styles.animal, isUrdu && styles.rtl]}>
+              </UrduText>
+              <UrduText isUrdu={isUrdu} style={[styles.animal, isUrdu && styles.rtl]}>
                 {isUrdu ? item.animal_ur : item.animal} · {isUrdu ? AGE_LABELS[item.age].ur : AGE_LABELS[item.age].en}
-              </Text>
-              <Text style={[styles.date, isUrdu && styles.rtl]}>
+              </UrduText>
+              <UrduText isUrdu={isUrdu} style={[styles.date, isUrdu && styles.rtl]}>
                 {isUrdu ? item.date_ur : item.date_en}
-              </Text>
+              </UrduText>
             </View>
             <View style={[styles.badge, item.status === 'treated' ? styles.badgeTreated : styles.badgeOngoing]}>
-              <Text style={[styles.badgeText, item.status === 'treated' ? styles.badgeTreatedText : styles.badgeOngoingText]}>
+              <UrduText isUrdu={isUrdu} style={[styles.badgeText, item.status === 'treated' ? styles.badgeTreatedText : styles.badgeOngoingText]}>
                 {item.status === 'treated' ? t.treated : t.ongoing}
-              </Text>
+              </UrduText>
             </View>
           </View>
         ))}
@@ -63,7 +64,7 @@ export default function HistoryScreen() {
         style={styles.backBtn}
         onPress={() => router.push({ pathname: '/home', params: { lang, name } })}
       >
-        <Text style={styles.backBtnText}>{isUrdu ? 'واپس جائیں' : 'Go Back'}</Text>
+        <UrduText isUrdu={isUrdu} style={styles.backBtnText}>{isUrdu ? 'واپس جائیں' : 'Go Back'}</UrduText>
       </TouchableOpacity>
     </View>
   );

@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { UrduText } from '../components/UrduText';
 
 export default function SplashScreen() {
   const router = useRouter();
@@ -9,14 +10,14 @@ export default function SplashScreen() {
       <View style={styles.circle}>
         <Text style={styles.emoji}>🐄</Text>
       </View>
-      <Text style={styles.title}>میرا مویشی</Text>
-      <Text style={styles.subtitle}>مویشیوں کی بیماریوں کی تشخیص</Text>
+      <UrduText style={styles.title}>میرا مویشی</UrduText>
+      <UrduText style={styles.subtitle}>مویشیوں کی بیماریوں کی تشخیص</UrduText>
 
       <TouchableOpacity
         style={styles.btn}
         onPress={() => router.replace('/language')}
       >
-        <Text style={styles.btnText}>شروع کریں</Text>
+        <UrduText style={styles.btnText}>شروع کریں</UrduText>
       </TouchableOpacity>
     </View>
   );

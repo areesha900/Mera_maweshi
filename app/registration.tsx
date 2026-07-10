@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { UrduText } from '../components/UrduText';
 import { PAKISTAN_DATA } from '../lib/pakistanData';
 
 type PickerProps = {
@@ -22,15 +23,15 @@ function CascadePicker({
 }: PickerProps) {
   return (
     <View style={styles.field}>
-      <Text style={[styles.label, isUrdu && styles.rtl]}>{label}</Text>
+      <UrduText isUrdu={isUrdu} style={[styles.label, isUrdu && styles.rtl]}>{label}</UrduText>
       <TouchableOpacity
         style={[styles.picker, disabled && styles.pickerDisabled]}
         onPress={() => !disabled && toggle(field)}
         activeOpacity={disabled ? 1 : 0.7}
       >
-        <Text style={[styles.pickerText, !value && styles.pickerPlaceholder, isUrdu && styles.rtl]}>
+        <UrduText isUrdu={isUrdu} style={[styles.pickerText, !value && styles.pickerPlaceholder, isUrdu && styles.rtl]}>
           {value || placeholder}
-        </Text>
+        </UrduText>
         <Text style={styles.pickerArrow}>
           {disabled ? '🔒' : openDropdown === field ? '▲' : '▼'}
         </Text>
@@ -49,9 +50,9 @@ function CascadePicker({
                 style={[styles.dropdownItem, value === opt && styles.dropdownItemSelected]}
                 onPress={() => onSelect(opt)}
               >
-                <Text style={[styles.dropdownText, isUrdu && styles.rtl, value === opt && styles.dropdownTextSelected]}>
+                <UrduText isUrdu={isUrdu} style={[styles.dropdownText, isUrdu && styles.rtl, value === opt && styles.dropdownTextSelected]}>
                   {opt}
-                </Text>
+                </UrduText>
               </TouchableOpacity>
             ))}
           </ScrollView>
@@ -136,7 +137,7 @@ export default function RegistrationScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
-        <Text style={styles.topbarText}>{t.title}</Text>
+        <UrduText isUrdu={isUrdu} style={styles.topbarText}>{t.title}</UrduText>
       </View>
 
       <ScrollView
@@ -145,11 +146,11 @@ export default function RegistrationScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>{t.heading}</Text>
+          <UrduText isUrdu={isUrdu} style={styles.cardTitle}>{t.heading}</UrduText>
 
           {/* Name */}
           <View style={styles.field}>
-            <Text style={[styles.label, isUrdu && styles.rtl]}>{t.name}</Text>
+            <UrduText isUrdu={isUrdu} style={[styles.label, isUrdu && styles.rtl]}>{t.name}</UrduText>
             <TextInput
               style={[styles.input, isUrdu && styles.rtl]}
               value={name}
@@ -161,7 +162,7 @@ export default function RegistrationScreen() {
 
           {/* Phone */}
           <View style={styles.field}>
-            <Text style={[styles.label, isUrdu && styles.rtl]}>{t.phone}</Text>
+            <UrduText isUrdu={isUrdu} style={[styles.label, isUrdu && styles.rtl]}>{t.phone}</UrduText>
             <TextInput
               style={[styles.input, isUrdu && styles.rtl]}
               value={phone}
@@ -206,9 +207,9 @@ export default function RegistrationScreen() {
           />
 
           {showError && (
-            <Text style={styles.errorText}>
+            <UrduText isUrdu={isUrdu} style={styles.errorText}>
               {isUrdu ? 'تمام ضروری خانے پُر کریں' : 'All required fields must be filled'}
-            </Text>
+            </UrduText>
           )}
 
           <TouchableOpacity
@@ -222,7 +223,7 @@ export default function RegistrationScreen() {
               router.push({ pathname: '/home', params: { lang, name } });
             }}
           >
-            <Text style={styles.btnText}>{t.btn}</Text>
+            <UrduText isUrdu={isUrdu} style={styles.btnText}>{t.btn}</UrduText>
           </TouchableOpacity>
         </View>
       </ScrollView>

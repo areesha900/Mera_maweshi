@@ -1,5 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { UrduText } from '../components/UrduText';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -23,12 +24,12 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
-        <Text style={styles.appName}>{t.appName}</Text>
-        <Text style={styles.appSub}>{t.appSub}</Text>
+        <UrduText isUrdu={isUrdu} style={styles.appName}>{t.appName}</UrduText>
+        <UrduText isUrdu={isUrdu} style={styles.appSub}>{t.appSub}</UrduText>
       </View>
 
       <View style={styles.body}>
-        <Text style={[styles.greeting, isUrdu && styles.rtl]}>{t.greeting}</Text>
+        <UrduText isUrdu={isUrdu} style={[styles.greeting, isUrdu && styles.rtl]}>{t.greeting}</UrduText>
 
         {/* Diagnosis */}
         <TouchableOpacity
@@ -39,8 +40,8 @@ export default function HomeScreen() {
             <Text style={styles.icon}>🔍</Text>
           </View>
           <View style={styles.cardText}>
-            <Text style={[styles.cardLabel, isUrdu && styles.rtl]}>{t.diagLabel}</Text>
-            <Text style={[styles.cardDesc, isUrdu && styles.rtl]}>{t.diagDesc}</Text>
+            <UrduText isUrdu={isUrdu} style={[styles.cardLabel, isUrdu && styles.rtl]}>{t.diagLabel}</UrduText>
+            <UrduText isUrdu={isUrdu} style={[styles.cardDesc, isUrdu && styles.rtl]}>{t.diagDesc}</UrduText>
           </View>
           <Text style={styles.arrow}>›</Text>
         </TouchableOpacity>
@@ -54,8 +55,8 @@ export default function HomeScreen() {
             <Text style={styles.icon}>📋</Text>
           </View>
           <View style={styles.cardText}>
-            <Text style={[styles.cardLabel, isUrdu && styles.rtl]}>{t.histLabel}</Text>
-            <Text style={[styles.cardDesc, isUrdu && styles.rtl]}>{t.histDesc}</Text>
+            <UrduText isUrdu={isUrdu} style={[styles.cardLabel, isUrdu && styles.rtl]}>{t.histLabel}</UrduText>
+            <UrduText isUrdu={isUrdu} style={[styles.cardDesc, isUrdu && styles.rtl]}>{t.histDesc}</UrduText>
           </View>
           <Text style={styles.arrow}>›</Text>
         </TouchableOpacity>
@@ -69,8 +70,8 @@ export default function HomeScreen() {
             <Text style={styles.icon}>👤</Text>
           </View>
           <View style={styles.cardText}>
-            <Text style={[styles.cardLabel, isUrdu && styles.rtl]}>{t.profLabel}</Text>
-            <Text style={[styles.cardDesc, isUrdu && styles.rtl]}>{t.profDesc}</Text>
+            <UrduText isUrdu={isUrdu} style={[styles.cardLabel, isUrdu && styles.rtl]}>{t.profLabel}</UrduText>
+            <UrduText isUrdu={isUrdu} style={[styles.cardDesc, isUrdu && styles.rtl]}>{t.profDesc}</UrduText>
           </View>
           <Text style={styles.arrow}>›</Text>
         </TouchableOpacity>
@@ -84,8 +85,8 @@ export default function HomeScreen() {
             <Text style={styles.icon}>🌐</Text>
           </View>
           <View style={styles.cardText}>
-            <Text style={[styles.cardLabel, isUrdu && styles.rtl]}>{t.langLabel}</Text>
-            <Text style={[styles.cardDesc, isUrdu && styles.rtl]}>{t.langDesc}</Text>
+            <UrduText isUrdu={isUrdu} style={[styles.cardLabel, isUrdu && styles.rtl]}>{t.langLabel}</UrduText>
+            <UrduText isUrdu={isUrdu} style={[styles.cardDesc, isUrdu && styles.rtl]}>{t.langDesc}</UrduText>
           </View>
           <Text style={styles.arrow}>›</Text>
         </TouchableOpacity>
