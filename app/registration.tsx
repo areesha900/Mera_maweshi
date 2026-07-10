@@ -223,7 +223,14 @@ export default function RegistrationScreen() {
               router.push({ pathname: '/home', params: { lang, name } });
             }}
           >
-            <UrduText isUrdu={isUrdu} style={styles.btnText}>{t.btn}</UrduText>
+            <UrduText
+              isUrdu={isUrdu}
+              style={styles.btnText}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+            >
+              {t.btn}
+            </UrduText>
           </TouchableOpacity>
         </View>
       </ScrollView>

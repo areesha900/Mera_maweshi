@@ -89,7 +89,14 @@ export default function ResultScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
-        <UrduText isUrdu={isUrdu} style={styles.topbarText}>{t.title}</UrduText>
+        <UrduText
+          isUrdu={isUrdu}
+          style={styles.topbarText}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+        >
+          {t.title}
+        </UrduText>
       </View>
 
       {loading && (
@@ -175,7 +182,14 @@ export default function ResultScreen() {
             onPress={() => router.push({ pathname: '/symptoms', params: { lang, name } })}
             activeOpacity={0.8}
           >
-            <UrduText isUrdu={isUrdu} style={styles.newBtnText}>{t.newBtn}</UrduText>
+            <UrduText
+              isUrdu={isUrdu}
+              style={styles.newBtnText}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+            >
+              {t.newBtn}
+            </UrduText>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -183,7 +197,14 @@ export default function ResultScreen() {
             onPress={() => router.push({ pathname: '/home', params: { lang, name } })}
             activeOpacity={0.8}
           >
-            <UrduText isUrdu={isUrdu} style={styles.homeBtnText}>{t.homeBtn}</UrduText>
+            <UrduText
+              isUrdu={isUrdu}
+              style={styles.homeBtnText}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+            >
+              {t.homeBtn}
+            </UrduText>
           </TouchableOpacity>
 
           <View style={{ height: 60 }} />
@@ -409,7 +430,7 @@ const styles = StyleSheet.create({
   miniAdviceIcon: { fontSize: 14 },
   miniAdviceTitle: { fontSize: 12, fontWeight: '700', color: '#1b5e20' },
   adviceItem: { flexDirection: 'row', alignItems: 'flex-start', gap: 7, marginBottom: 7 },
-  adviceItemRtl: { flexDirection: 'row-reverse' },
+  adviceItemRtl: { flexDirection: 'row-reverse', marginBottom: 14 },
   dot: { width: 5, height: 5, borderRadius: 2.5, marginTop: 6, flexShrink: 0 },
   adviceTextSmall: { flex: 1, fontSize: 12, color: '#444', lineHeight: 17 },
 
@@ -425,7 +446,7 @@ const styles = StyleSheet.create({
   },
   adviceTitle: { fontSize: 13, fontWeight: '700', color: '#1b5e20', marginBottom: 12 },
   firstAidSection: { marginTop: 12, paddingTop: 12, borderTopWidth: 1, borderTopColor: '#eee' },
-  firstAidSourceLabel: { fontSize: 11, fontWeight: '700', marginBottom: 8 },
+  firstAidSourceLabel: { fontSize: 12, fontWeight: '700', marginBottom: 8 },
 
   chips: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start' },
   chip: {
@@ -451,7 +472,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   vetIcon: { fontSize: 22 },
-  vetText: { flex: 1, fontSize: 12, color: '#e65100', lineHeight: 18 },
+  vetText: { flex: 1, fontSize: 12, color: '#e65100', lineHeight: 20 },
 
   newBtn: {
     backgroundColor: '#2d6a2d',

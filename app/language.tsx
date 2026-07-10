@@ -10,7 +10,13 @@ export default function LanguageScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
-        <UrduText style={styles.topbarText}>زبان منتخب کریں</UrduText>
+        <UrduText
+          style={styles.topbarText}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+        >
+          زبان منتخب کریں
+        </UrduText>
       </View>
 
       <View style={styles.body}>
@@ -44,7 +50,12 @@ export default function LanguageScreen() {
           style={styles.btn}
           onPress={() => router.replace({ pathname: '/home', params: { lang: selected } })}
         >
-          <UrduText isUrdu={selected === 'ur'} style={styles.btnText}>
+          <UrduText
+            isUrdu={selected === 'ur'}
+            style={styles.btnText}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+          >
             {selected === 'ur' ? 'آگے بڑھیں' : 'Continue'}
           </UrduText>
         </TouchableOpacity>

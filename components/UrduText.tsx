@@ -25,7 +25,7 @@ function familyForWeight(weight?: string | number): string {
 // Nastaliq's tall loops and diagonal strokes make it read noticeably bigger
 // than a system sans-serif at the same fontSize, so we scale it down a bit
 // wherever it's applied. Tweak NASTALIQ_SIZE_SCALE if it still feels off.
-const NASTALIQ_SIZE_SCALE = 0.82;
+const NASTALIQ_SIZE_SCALE = 0.68;
 
 /**
  * Drop-in replacement for <Text> that applies the Nastaliq Urdu font
@@ -40,12 +40,23 @@ export function UrduText({ isUrdu = true, style, ...props }: UrduTextProps) {
   }
 
   const flat = StyleSheet.flatten(style) || {};
-  const urduFont: { fontFamily: string; fontWeight: 'normal'; fontSize?: number } = {
+  const urduFont: {
+    fontFamily: string;
+    fontWeight: 'normal';
+    fontSize?: number;
+    lineHeight?: number;
+  } = {
     fontFamily: familyForWeight(flat.fontWeight),
     fontWeight: 'normal', // weight is now baked into the font file, not synthesized
   };
   if (typeof flat.fontSize === 'number') {
     urduFont.fontSize = flat.fontSize * NASTALIQ_SIZE_SCALE;
+  }
+  // Scale lineHeight down too (only when the caller set one explicitly),
+  // so Urdu paragraphs don't keep English-sized vertical spacing now that
+  // the glyphs themselves are smaller.
+  if (typeof flat.lineHeight === 'number') {
+    urduFont.lineHeight = flat.lineHeight * NASTALIQ_SIZE_SCALE;
   }
 
   return <Text style={[style, urduFont]} {...props} />;

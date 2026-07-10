@@ -172,7 +172,14 @@ export default function SymptomsScreen() {
           onPress={handleDiagnose}
           disabled={selectedList.length === 0}
         >
-          <UrduText isUrdu={isUrdu} style={styles.diagnoseBtnText}>{t.btn}</UrduText>
+          <UrduText
+            isUrdu={isUrdu}
+            style={styles.diagnoseBtnText}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+          >
+            {t.btn}
+          </UrduText>
         </TouchableOpacity>
 
         <View style={{ height: 60 }} />

@@ -30,7 +30,14 @@ export default function HistoryScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
-        <UrduText isUrdu={isUrdu} style={styles.topbarText}>{t.title}</UrduText>
+        <UrduText
+          isUrdu={isUrdu}
+          style={styles.topbarText}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+        >
+          {t.title}
+        </UrduText>
       </View>
 
       <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
@@ -64,7 +71,14 @@ export default function HistoryScreen() {
         style={styles.backBtn}
         onPress={() => router.push({ pathname: '/home', params: { lang, name } })}
       >
-        <UrduText isUrdu={isUrdu} style={styles.backBtnText}>{isUrdu ? 'واپس جائیں' : 'Go Back'}</UrduText>
+        <UrduText
+          isUrdu={isUrdu}
+          style={styles.backBtnText}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+        >
+          {isUrdu ? 'واپس جائیں' : 'Go Back'}
+        </UrduText>
       </TouchableOpacity>
     </View>
   );
