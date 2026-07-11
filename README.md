@@ -45,13 +45,6 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 
 ---
 
-## ⚙️ AI Pipeline
-
-
-
-
----
-
 ## 📊 Dataset
 
 #### Maweshi Raw Dataset:
