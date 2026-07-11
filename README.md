@@ -41,7 +41,7 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 | Trained Model | scikit-learn pipeline | Classifier trained on the Maweshi dataset (animal, sex, age, symptoms → disease) |
 | LLM | Groq API — Llama 3.3 70B Versatile | Independent diagnosis for comparison against the trained model |
 | Hosting | Render | FastAPI + trained model hosted online so the app can reach it from anywhere |
-| Database *(in progress)* | Firebase Firestore | Farmer profiles, animal records, diagnosis history |
+| Database *(in progress)* | -- | Farmer profiles, animal records, diagnosis history |
 
 ---
 
