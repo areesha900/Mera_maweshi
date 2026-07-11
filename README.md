@@ -10,7 +10,7 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 ## ✨ Features
 
 - 🌐 **Multilingual** — English and Urdu
-- 🤖 **AI Diagnosis** — Fine-tuned LLM trained on livestock disease data
+- 🤖 **AI Diagnosis** — Fine-tuned LLM trained on livestock disease data (TBU)
 - 🩺 **Symptom Picker** — Tap-to-select symptoms (for a total of 9 organ systems)
 - 📍 **Location-aware** — Collects Province, District & Tehsil for regional outbreak tracking
 - 🧪 **Differential Diagnosis** — Shows the model's top-3 most likely diseases, not just the top pick
