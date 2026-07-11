@@ -47,15 +47,8 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 
 ## ⚙️ AI Pipeline
 
-```
-Farmer Input (symptom tap)
-      ↓
-ChromaDB Vector Search (disease knowledge base)
-      ↓
-LLM Inference (LLAMA 3.3 7-B Versatile)
-      ↓
-Display Diagnosis + Confidence Score + First-Aid Advice
-```
+
+
 
 ---
 
