@@ -68,5 +68,4 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language**
 - [x] React Native mobile app
 - [x] FastAPI backend server
 - [x] AI model
-- [ ] Full RAG pipeline (ChromaDB)
 - [ ] Farmer database & profile management (Firebase Firestore)
