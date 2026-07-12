@@ -17,10 +17,14 @@ import numpy as np
 import pandas as pd
 from groq import Groq
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
 from app.disease_reference import get_reference
+from app.db import get_db, init_db
+from app import models, schemas
 
 load_dotenv()
 
@@ -35,6 +39,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+init_db()
 
 # ---------- Load trained-model artifacts ----------
 try:
@@ -319,6 +325,106 @@ def diagnose(req: DiagnoseRequest):
         raise HTTPException(500, f"Both diagnosis paths failed: {result.llm_error} | {result.model_error}")
 
     return result
+
+
+# ---------- Farmer profile ----------
+# device_id is a UUID the app generates once on first launch (see
+# lib/deviceId.ts). There's no verification of it -- it's the app's
+# stand-in for an "account" without asking farmers to log in. Treat it as
+# a convenience identifier, not a security boundary.
+
+@app.post("/api/farmers", response_model=schemas.FarmerOut)
+def upsert_farmer(payload: schemas.FarmerIn, db: Session = Depends(get_db)):
+    farmer = db.get(models.Farmer, payload.device_id)
+    if farmer is None:
+        farmer = models.Farmer(device_id=payload.device_id)
+        db.add(farmer)
+
+    farmer.name = payload.name
+    farmer.phone = payload.phone
+    farmer.province = payload.province
+    farmer.district = payload.district
+    farmer.tehsil = payload.tehsil
+
+    db.commit()
+    db.refresh(farmer)
+    return farmer
+
+
+@app.get("/api/farmers/{device_id}", response_model=schemas.FarmerOut)
+def get_farmer(device_id: str, db: Session = Depends(get_db)):
+    farmer = db.get(models.Farmer, device_id)
+    if farmer is None:
+        raise HTTPException(404, "No farmer profile found for this device")
+    return farmer
+
+
+# ---------- Diagnosis history ----------
+
+@app.post("/api/diagnoses", response_model=schemas.DiagnosisOut)
+def save_diagnosis(payload: schemas.DiagnosisIn, db: Session = Depends(get_db)):
+    if db.get(models.Farmer, payload.device_id) is None:
+        raise HTTPException(
+            400, "Unknown device_id -- create a farmer profile via POST /api/farmers first"
+        )
+    if payload.llm is None and payload.model is None:
+        raise HTTPException(400, "At least one of llm/model results is required")
+
+    first_aid_snapshot = {
+        "llm": {"en": payload.llm.first_aid_en, "ur": payload.llm.first_aid_ur} if payload.llm else None,
+        "model": {"en": payload.model.first_aid_en, "ur": payload.model.first_aid_ur} if payload.model else None,
+    }
+
+    record = models.Diagnosis(
+        device_id=payload.device_id,
+        animal_type=payload.animal_type,
+        sex=payload.sex,
+        age_range=payload.age_range,
+        symptoms=payload.symptoms,
+        llm_disease_en=payload.llm.disease_en if payload.llm else None,
+        llm_disease_ur=payload.llm.disease_ur if payload.llm else None,
+        llm_confidence=payload.llm.confidence if payload.llm else None,
+        model_disease_en=payload.model.disease_en if payload.model else None,
+        model_disease_ur=payload.model.disease_ur if payload.model else None,
+        model_confidence=payload.model.confidence if payload.model else None,
+        serious=bool((payload.llm and payload.llm.serious) or (payload.model and payload.model.serious)),
+        status="ongoing",
+        first_aid_snapshot=first_aid_snapshot,
+    )
+    db.add(record)
+    db.commit()
+    db.refresh(record)
+    return record
+
+
+@app.get("/api/diagnoses", response_model=List[schemas.DiagnosisOut])
+def list_diagnoses(device_id: str, db: Session = Depends(get_db)):
+    return (
+        db.query(models.Diagnosis)
+        .filter(models.Diagnosis.device_id == device_id)
+        .order_by(models.Diagnosis.created_at.desc())
+        .all()
+    )
+
+
+@app.patch("/api/diagnoses/{diagnosis_id}", response_model=schemas.DiagnosisOut)
+def update_diagnosis_status(
+    diagnosis_id: int, payload: schemas.DiagnosisStatusIn, db: Session = Depends(get_db)
+):
+    record = db.get(models.Diagnosis, diagnosis_id)
+    if record is None:
+        raise HTTPException(404, "Diagnosis not found")
+    # Ownership check: only the device_id that created this record can update
+    # it. Since device_id isn't verified server-side, this stops accidental
+    # cross-farmer edits but not a deliberately spoofed device_id -- fine for
+    # this app's stakes, not a real access-control boundary.
+    if record.device_id != payload.device_id:
+        raise HTTPException(403, "device_id does not match this diagnosis's owner")
+
+    record.status = payload.status
+    db.commit()
+    db.refresh(record)
+    return record
 
 
 @app.get("/api/health")

@@ -2,7 +2,9 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { UrduText } from '../components/UrduText';
+import { getDeviceId } from '../lib/deviceId';
 import { DiagnoseResponse, DiagnosisResult, fetchDiagnosis } from '../lib/diagnosisApi';
+import { saveDiagnosis } from '../lib/farmerApi';
 import { SYMPTOM_CATEGORIES } from '../lib/symptomsData';
 
 // Backend/LLM text can occasionally glue scripts together with no space
@@ -11,15 +13,33 @@ import { SYMPTOM_CATEGORIES } from '../lib/symptomsData';
 // container. This inserts an invisible zero-width space every `maxRun`
 // characters inside any "word" longer than that, so it always has a place
 // to wrap -- it doesn't change what's displayed, only where it can break.
+//
+// IMPORTANT: this must never insert a break inside an Arabic/Urdu cursive
+// run. Arabic letters are shaped based on their neighbours (initial/medial/
+// final/isolated forms), and a zero-width space is a non-joining character --
+// it forces the letters on either side of it into isolated/final forms even
+// though nothing actually wraps there. That's what caused Urdu text (first
+// aid steps, disease names, reasoning) to render as disconnected letters
+// instead of proper joined Nastaliq script. So we only chunk runs made of
+// non-Arabic characters and leave any Arabic-script run completely untouched,
+// no matter how long it is -- Urdu words don't need this fix in the first
+// place since RN wraps fine at real spaces.
+const ARABIC_SCRIPT_CHARS =
+  '\\u0600-\\u06FF\\u0750-\\u077F\\u08A0-\\u08FF\\uFB50-\\uFDFF\\uFE70-\\uFEFF\\u200C\\u200D';
+const NON_ARABIC_RUN = new RegExp(`[^${ARABIC_SCRIPT_CHARS}]+`, 'g');
+
 function wrapLongTokens(text?: string | null, maxRun = 18): string {
   if (!text) return text ?? '';
   return text
     .split(' ')
-    .map(word =>
-      word.length > maxRun
-        ? word.replace(new RegExp(`(.{${maxRun}})`, 'g'), '$1\u200B')
-        : word
-    )
+    .map(word => {
+      if (word.length <= maxRun) return word;
+      return word.replace(NON_ARABIC_RUN, run =>
+        run.length > maxRun
+          ? run.replace(new RegExp(`(.{${maxRun}})`, 'g'), '$1\u200B')
+          : run
+      );
+    })
     .join(' ');
 }
 
@@ -46,7 +66,27 @@ export default function ResultScreen() {
       symptoms: symptomList,
       lang,
     })
-      .then(setData)
+      .then(result => {
+        setData(result);
+        // Best-effort save to history -- a farmer's diagnosis is already
+        // shown on screen at this point regardless of whether this save
+        // succeeds, so a flaky connection here shouldn't block or retry
+        // against the UI; it just means this one diagnosis won't show up
+        // in History later.
+        getDeviceId()
+          .then(deviceId =>
+            saveDiagnosis({
+              device_id: deviceId,
+              animal_type: animal ?? 'Cattle',
+              sex: sex ?? 'Male',
+              age_range: age ?? 'Adult',
+              symptoms: symptomList,
+              llm: result.llm,
+              model: result.model,
+            })
+          )
+          .catch(err => console.warn('Could not save diagnosis to history:', err));
+      })
       .catch(err => setError(err.message ?? String(err)))
       .finally(() => setLoading(false));
   };

@@ -1,6 +1,16 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { UrduText } from '../components/UrduText';
+import { getDeviceId } from '../lib/deviceId';
+import { DiagnosisRecord, listDiagnoses } from '../lib/farmerApi';
+
+const ANIMAL_LABELS: Record<string, { en: string; ur: string; icon: string; color: string }> = {
+  Cattle:  { en: 'Cattle',  ur: 'گائے',  icon: '🐄', color: '#ffebee' },
+  Buffalo: { en: 'Buffalo', ur: 'بھینس', icon: '🐃', color: '#e8f5e9' },
+  Goat:    { en: 'Goat',    ur: 'بکری',  icon: '🐐', color: '#f3e5f5' },
+  Sheep:   { en: 'Sheep',   ur: 'بھیڑ',  icon: '🐑', color: '#fff3e0' },
+};
 
 const AGE_LABELS: Record<string, { en: string; ur: string }> = {
   'New Born': { en: 'New Born', ur: 'نوزائیدہ' },
@@ -8,24 +18,64 @@ const AGE_LABELS: Record<string, { en: string; ur: string }> = {
   'Adult':    { en: 'Adult',    ur: 'بالغ' },
 };
 
-const HISTORY = [
-  { id: 1, disease_en: 'Lumpy Skin Disease', disease_ur: 'گانٹھ دار جلد کی بیماری', animal: 'Cattle', animal_ur: 'گائے', age: 'Growing', date_en: 'June 18, 2026', date_ur: '۱۸ جون ۲۰۲۶', status: 'ongoing', icon: '🐄', color: '#ffebee' },
-  { id: 2, disease_en: 'Foot and Mouth Disease', disease_ur: 'منہ کھر', animal: 'Buffalo', animal_ur: 'بھینس', age: 'Adult', date_en: 'May 2, 2026', date_ur: '۲ مئی ۲۰۲۶', status: 'treated', icon: '🐃', color: '#e8f5e9' },
-  { id: 3, disease_en: 'Drenching Pneumonia', disease_ur: 'نمونیا', animal: 'Goat', animal_ur: 'بکری', age: 'New Born', date_en: 'Mar 14, 2026', date_ur: '۱۴ مارچ ۲۰۲۶', status: 'treated', icon: '🐐', color: '#f3e5f5' },
-  { id: 4, disease_en: 'Theileriosis', disease_ur: 'تھیلیریوسس', animal: 'Cattle', animal_ur: 'گائے', age: 'Growing', date_en: 'Jan 5, 2026', date_ur: '۵ جنوری ۲۰۲۶', status: 'treated', icon: '🐄', color: '#fff3e0' },
-];
+const MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTHS_UR = ['جنوری', 'فروری', 'مارچ', 'اپریل', 'مئی', 'جون', 'جولائی', 'اگست', 'ستمبر', 'اکتوبر', 'نومبر', 'دسمبر'];
+const URDU_DIGITS = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
+function toUrduDigits(n: number): string {
+  return String(n).replace(/[0-9]/g, d => URDU_DIGITS[Number(d)]);
+}
+
+function formatDate(iso: string, isUrdu: boolean): string {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  const day = d.getDate();
+  const month = d.getMonth();
+  const year = d.getFullYear();
+  return isUrdu
+    ? `${toUrduDigits(day)} ${MONTHS_UR[month]} ${toUrduDigits(year)}`
+    : `${MONTHS_EN[month]} ${day}, ${year}`;
+}
+
+// Prefer the model's disease pick since it's grounded in real case data;
+// fall back to the LLM's if the model path failed for that record.
+function primaryDisease(item: DiagnosisRecord): { en: string; ur: string } | null {
+  if (item.model_disease_en) return { en: item.model_disease_en, ur: item.model_disease_ur ?? item.model_disease_en };
+  if (item.llm_disease_en) return { en: item.llm_disease_en, ur: item.llm_disease_ur ?? item.llm_disease_en };
+  return null;
+}
 
 export default function HistoryScreen() {
   const router = useRouter();
   const { lang, name } = useLocalSearchParams<{ lang: string; name: string }>();
   const isUrdu = lang === 'ur';
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [records, setRecords] = useState<DiagnosisRecord[]>([]);
+
   const t = {
     title:   isUrdu ? 'پرانی تشخیص' : 'Diagnosis History',
     ongoing: isUrdu ? 'جاری'        : 'Ongoing',
     treated: isUrdu ? 'ٹھیک'        : 'Treated',
-    empty:   isUrdu ? 'کوئی ریکارڈ نہیں' : 'No records yet',
+    empty:   isUrdu ? 'ابھی کوئی ریکارڈ نہیں' : 'No records yet',
+    errorTitle: isUrdu ? 'خرابی' : 'Something went wrong',
+    retry:   isUrdu ? 'دوبارہ کوشش کریں' : 'Retry',
   };
+
+  const load = useCallback(() => {
+    setLoading(true);
+    setError(null);
+    getDeviceId()
+      .then(deviceId => listDiagnoses(deviceId))
+      .then(data => setRecords(data))
+      .catch(err => setError(err.message ?? String(err)))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   return (
     <View style={styles.container}>
@@ -40,32 +90,66 @@ export default function HistoryScreen() {
         </UrduText>
       </View>
 
-      <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
-        {HISTORY.map(item => (
-          <View key={item.id} style={styles.item}>
-            <View style={[styles.iconWrap, { backgroundColor: item.color }]}>
-              <Text style={styles.icon}>{item.icon}</Text>
-            </View>
-            <View style={styles.info}>
-              <UrduText isUrdu={isUrdu} style={[styles.disease, isUrdu && styles.rtl]}>
-                {isUrdu ? item.disease_ur : item.disease_en}
-              </UrduText>
-              <UrduText isUrdu={isUrdu} style={[styles.animal, isUrdu && styles.rtl]}>
-                {isUrdu ? item.animal_ur : item.animal} · {isUrdu ? AGE_LABELS[item.age].ur : AGE_LABELS[item.age].en}
-              </UrduText>
-              <UrduText isUrdu={isUrdu} style={[styles.date, isUrdu && styles.rtl]}>
-                {isUrdu ? item.date_ur : item.date_en}
-              </UrduText>
-            </View>
-            <View style={[styles.badge, item.status === 'treated' ? styles.badgeTreated : styles.badgeOngoing]}>
-              <UrduText isUrdu={isUrdu} style={[styles.badgeText, item.status === 'treated' ? styles.badgeTreatedText : styles.badgeOngoingText]}>
-                {item.status === 'treated' ? t.treated : t.ongoing}
-              </UrduText>
-            </View>
+      {loading && (
+        <View style={styles.centerFill}>
+          <ActivityIndicator size="large" color="#2d6a2d" />
+        </View>
+      )}
+
+      {!loading && error && (
+        <View style={styles.centerFill}>
+          <View style={styles.errorCard}>
+            <UrduText isUrdu={isUrdu} style={styles.errorTitle}>{t.errorTitle}</UrduText>
+            <Text style={styles.errorText}>{error}</Text>
+            <TouchableOpacity style={styles.retryBtn} onPress={load} activeOpacity={0.8}>
+              <UrduText isUrdu={isUrdu} style={styles.retryBtnText}>{t.retry}</UrduText>
+            </TouchableOpacity>
           </View>
-        ))}
-        <View style={{ height: 30 }} />
-      </ScrollView>
+        </View>
+      )}
+
+      {!loading && !error && (
+        <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
+          {records.length === 0 && (
+            <View style={styles.emptyWrap}>
+              <UrduText isUrdu={isUrdu} style={styles.emptyText}>{t.empty}</UrduText>
+            </View>
+          )}
+
+          {records.map(item => {
+            const animal = ANIMAL_LABELS[item.animal_type] ?? {
+              en: item.animal_type, ur: item.animal_type, icon: '🐾', color: '#eeeeee',
+            };
+            const age = AGE_LABELS[item.age_range] ?? { en: item.age_range, ur: item.age_range };
+            const disease = primaryDisease(item);
+
+            return (
+              <View key={item.id} style={styles.item}>
+                <View style={[styles.iconWrap, { backgroundColor: animal.color }]}>
+                  <Text style={styles.icon}>{animal.icon}</Text>
+                </View>
+                <View style={styles.info}>
+                  <UrduText isUrdu={isUrdu} style={[styles.disease, isUrdu && styles.rtl]}>
+                    {disease ? (isUrdu ? disease.ur : disease.en) : (isUrdu ? 'نامعلوم' : 'Unknown')}
+                  </UrduText>
+                  <UrduText isUrdu={isUrdu} style={[styles.animal, isUrdu && styles.rtl]}>
+                    {isUrdu ? animal.ur : animal.en} · {isUrdu ? age.ur : age.en}
+                  </UrduText>
+                  <UrduText isUrdu={isUrdu} style={[styles.date, isUrdu && styles.rtl]}>
+                    {formatDate(item.created_at, isUrdu)}
+                  </UrduText>
+                </View>
+                <View style={[styles.badge, item.status === 'treated' ? styles.badgeTreated : styles.badgeOngoing]}>
+                  <UrduText isUrdu={isUrdu} style={[styles.badgeText, item.status === 'treated' ? styles.badgeTreatedText : styles.badgeOngoingText]}>
+                    {item.status === 'treated' ? t.treated : t.ongoing}
+                  </UrduText>
+                </View>
+              </View>
+            );
+          })}
+          <View style={{ height: 30 }} />
+        </ScrollView>
+      )}
 
       <TouchableOpacity
         style={styles.backBtn}
@@ -95,6 +179,24 @@ const styles = StyleSheet.create({
   topbarText: { color: 'white', fontSize: 16, fontWeight: '600' },
   body: { padding: 14 },
   rtl: { textAlign: 'right' },
+
+  centerFill: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, gap: 12 },
+
+  errorCard: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 28,
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 340,
+  },
+  errorTitle: { fontSize: 17, fontWeight: '700', color: '#c62828', marginBottom: 8 },
+  errorText: { fontSize: 13, color: '#666', textAlign: 'center', lineHeight: 19, marginBottom: 20 },
+  retryBtn: { backgroundColor: '#2d6a2d', borderRadius: 12, paddingVertical: 13, paddingHorizontal: 32, width: '100%', alignItems: 'center' },
+  retryBtnText: { color: 'white', fontWeight: '600', fontSize: 14 },
+
+  emptyWrap: { alignItems: 'center', paddingTop: 60 },
+  emptyText: { fontSize: 13, color: '#888' },
 
   item: {
     backgroundColor: 'white',
@@ -136,7 +238,7 @@ const styles = StyleSheet.create({
   backBtn: {
     marginHorizontal: 14,
     marginTop: 14,
-    marginBottom: 35, 
+    marginBottom: 35,
     backgroundColor: '#2d6a2d',
     borderRadius: 12,
     padding: 14,

@@ -2,6 +2,8 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { UrduText } from '../components/UrduText';
+import { getDeviceId } from '../lib/deviceId';
+import { upsertFarmer } from '../lib/farmerApi';
 import { PAKISTAN_DATA } from '../lib/pakistanData';
 
 type PickerProps = {
@@ -75,6 +77,7 @@ export default function RegistrationScreen() {
   const [tehsil, setTehsil]     = useState('');
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [showError, setShowError] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const toggle = (field: string) => {
     if (field === 'district' && !province) return;
@@ -94,6 +97,14 @@ export default function RegistrationScreen() {
           ) ?? ''
         : '')
     : district;
+
+  const tehKey = isUrdu
+    ? (provKey && distKey
+        ? Object.keys(PAKISTAN_DATA[provKey].districts[distKey].tehsils).find(
+            k => PAKISTAN_DATA[provKey].districts[distKey].tehsils[k].ur === tehsil
+          ) ?? ''
+        : '')
+    : tehsil;
 
   // Option lists
   const provinceOptions = Object.keys(PAKISTAN_DATA).map(k =>
@@ -214,14 +225,36 @@ export default function RegistrationScreen() {
 
           <TouchableOpacity
             style={styles.btn}
-            onPress={() => {
+            onPress={async () => {
               if (!name.trim() || !province || !district || !tehsil) {
                 setShowError(true);
                 return;
               }
               setShowError(false);
+              setSaving(true);
+              try {
+                const deviceId = await getDeviceId();
+                await upsertFarmer({
+                  device_id: deviceId,
+                  name: name.trim(),
+                  phone: phone.trim() || null,
+                  province: provKey,
+                  district: distKey,
+                  tehsil: tehKey,
+                });
+              } catch (err) {
+                // Best-effort: rural connectivity can be unreliable, and a
+                // farmer shouldn't be blocked from using the app just
+                // because the profile sync failed. The profile stays only
+                // local for this session; retry happens next time they
+                // land on this screen with connectivity.
+                console.warn('Could not save farmer profile:', err);
+              } finally {
+                setSaving(false);
+              }
               router.push({ pathname: '/home', params: { lang, name } });
             }}
+            disabled={saving}
           >
             <UrduText
               isUrdu={isUrdu}
@@ -229,7 +262,7 @@ export default function RegistrationScreen() {
               numberOfLines={1}
               adjustsFontSizeToFit
             >
-              {t.btn}
+              {saving ? (isUrdu ? 'محفوظ ہو رہا ہے...' : 'Saving...') : t.btn}
             </UrduText>
           </TouchableOpacity>
         </View>
