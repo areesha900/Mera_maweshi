@@ -1,11 +1,54 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { UrduText } from '../components/UrduText';
+import { getDeviceId } from '../lib/deviceId';
+import { getFarmer } from '../lib/farmerApi';
+import { getLocalProfile, saveLocalProfile } from '../lib/profile';
 
 export default function LanguageScreen() {
   const [selected, setSelected] = useState<'en' | 'ur'>('en');
+  const [checking, setChecking] = useState(false);
   const router = useRouter();
+
+  // Registration only ever needs to happen once per device. On every
+  // subsequent launch we should skip straight to Home with the farmer's
+  // saved name -- never make them re-register.
+  const handleContinue = async () => {
+    setChecking(true);
+    try {
+      // Fast path: we've registered on this device before.
+      let profile = await getLocalProfile();
+
+      // No local cache (fresh install, or app storage was cleared) --
+      // check the backend before assuming this is a new farmer, in case
+      // the device_id survived but the local cache didn't.
+      if (!profile) {
+        try {
+          const deviceId = await getDeviceId();
+          const farmer = await getFarmer(deviceId);
+          profile = {
+            name: farmer.name,
+            phone: farmer.phone,
+            province: farmer.province,
+            district: farmer.district,
+            tehsil: farmer.tehsil,
+          };
+          await saveLocalProfile(profile);
+        } catch {
+          profile = null; // truly not registered yet (or offline) -- send to registration
+        }
+      }
+
+      if (profile) {
+        router.replace({ pathname: '/home', params: { lang: selected, name: profile.name } });
+      } else {
+        router.replace({ pathname: '/registration', params: { lang: selected } });
+      }
+    } finally {
+      setChecking(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -48,16 +91,21 @@ export default function LanguageScreen() {
 
         <TouchableOpacity
           style={styles.btn}
-          onPress={() => router.replace({ pathname: '/home', params: { lang: selected } })}
+          onPress={handleContinue}
+          disabled={checking}
         >
-          <UrduText
-            isUrdu={selected === 'ur'}
-            style={styles.btnText}
-            numberOfLines={1}
-            adjustsFontSizeToFit
-          >
-            {selected === 'ur' ? 'آگے بڑھیں' : 'Continue'}
-          </UrduText>
+          {checking ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <UrduText
+              isUrdu={selected === 'ur'}
+              style={styles.btnText}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+            >
+              {selected === 'ur' ? 'آگے بڑھیں' : 'Continue'}
+            </UrduText>
+          )}
         </TouchableOpacity>
       </View>
     </View>
