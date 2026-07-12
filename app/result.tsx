@@ -129,6 +129,13 @@ export default function ResultScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
+        <TouchableOpacity
+          style={[styles.backArrowBtn, isUrdu ? styles.backArrowBtnRight : styles.backArrowBtnLeft]}
+          onPress={() => router.back()}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Text style={styles.backArrowText}>{isUrdu ? '›' : '‹'}</Text>
+        </TouchableOpacity>
         <UrduText
           isUrdu={isUrdu}
           style={styles.topbarText}
@@ -368,7 +375,19 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 3 },
     elevation: 4,
+    position: 'relative',
   },
+  backArrowBtn: {
+    position: 'absolute',
+    bottom: 16,
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  backArrowBtnLeft:  { left: 12 },
+  backArrowBtnRight: { right: 12 },
+  backArrowText: { color: 'white', fontSize: 24, fontWeight: '700' },
   topbarText: { color: 'white', fontSize: 14, fontWeight: '600' },
   body: { flex: 1, padding: 12 },
   rtl: { textAlign: 'right' },

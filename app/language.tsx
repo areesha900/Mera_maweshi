@@ -53,6 +53,13 @@ export default function LanguageScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
+        <TouchableOpacity
+          style={[styles.backArrowBtn, selected === 'ur' ? styles.backArrowBtnRight : styles.backArrowBtnLeft]}
+          onPress={() => router.back()}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Text style={styles.backArrowText}>{selected === 'ur' ? '›' : '‹'}</Text>
+        </TouchableOpacity>
         <UrduText
           style={styles.topbarText}
           numberOfLines={1}
@@ -119,7 +126,19 @@ const styles = StyleSheet.create({
     paddingTop: 56,
     paddingBottom: 18,
     alignItems: 'center',
+    position: 'relative',
   },
+  backArrowBtn: {
+    position: 'absolute',
+    bottom: 14,
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  backArrowBtnLeft:  { left: 12 },
+  backArrowBtnRight: { right: 12 },
+  backArrowText: { color: 'white', fontSize: 24, fontWeight: '700' },
   topbarText: { color: 'white', fontSize: 16, fontWeight: '600' },
   body: { padding: 20, paddingTop: 24 },
   prompt: { fontSize: 13, color: '#555', textAlign: 'center', marginBottom: 20 },

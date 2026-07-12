@@ -184,6 +184,15 @@ export default function RegistrationScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
+        {isEditMode && (
+          <TouchableOpacity
+            style={[styles.backArrowBtn, isUrdu ? styles.backArrowBtnRight : styles.backArrowBtnLeft]}
+            onPress={() => router.replace({ pathname: '/home', params: { lang, name } })}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Text style={styles.backArrowText}>{isUrdu ? '›' : '‹'}</Text>
+          </TouchableOpacity>
+        )}
         <UrduText isUrdu={isUrdu} style={styles.topbarText}>{t.title}</UrduText>
       </View>
 
@@ -348,7 +357,18 @@ export default function RegistrationScreen() {
 
 const styles = StyleSheet.create({
   container:   { flex: 1, backgroundColor: '#f4f9f4' },
-  topbar:      { backgroundColor: '#2d6a2d', paddingTop: 56, paddingBottom: 18, alignItems: 'center' },
+  topbar:      { backgroundColor: '#2d6a2d', paddingTop: 56, paddingBottom: 18, alignItems: 'center', position: 'relative' },
+  backArrowBtn: {
+    position: 'absolute',
+    bottom: 14,
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  backArrowBtnLeft:  { left: 12 },
+  backArrowBtnRight: { right: 12 },
+  backArrowText: { color: 'white', fontSize: 24, fontWeight: '700' },
   topbarText:  { color: 'white', fontSize: 16, fontWeight: '600' },
   body:        { padding: 16 },
   card: {

@@ -1,15 +1,20 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { UrduText } from '../components/UrduText';
 import { getDeviceId } from '../lib/deviceId';
-import { DiagnosisRecord, listDiagnoses } from '../lib/farmerApi';
+import { DiagnosisRecord, listDiagnoses, updateDiagnosisStatus } from '../lib/farmerApi';
 
 const ANIMAL_LABELS: Record<string, { en: string; ur: string; icon: string; color: string }> = {
   Cattle:  { en: 'Cattle',  ur: 'گائے',  icon: '🐄', color: '#ffebee' },
   Buffalo: { en: 'Buffalo', ur: 'بھینس', icon: '🐃', color: '#e8f5e9' },
   Goat:    { en: 'Goat',    ur: 'بکری',  icon: '🐐', color: '#f3e5f5' },
   Sheep:   { en: 'Sheep',   ur: 'بھیڑ',  icon: '🐑', color: '#fff3e0' },
+};
+
+const SEX_LABELS: Record<string, { en: string; ur: string }> = {
+  Male:   { en: 'Male',   ur: 'نر' },
+  Female: { en: 'Female', ur: 'مادہ' },
 };
 
 const AGE_LABELS: Record<string, { en: string; ur: string }> = {
@@ -53,6 +58,8 @@ export default function HistoryScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [records, setRecords] = useState<DiagnosisRecord[]>([]);
+  const [deviceId, setDeviceId] = useState<string | null>(null);
+  const [togglingId, setTogglingId] = useState<number | null>(null);
 
   const t = {
     title:   isUrdu ? 'پرانی تشخیص' : 'Diagnosis History',
@@ -61,13 +68,20 @@ export default function HistoryScreen() {
     empty:   isUrdu ? 'ابھی کوئی ریکارڈ نہیں' : 'No records yet',
     errorTitle: isUrdu ? 'خرابی' : 'Something went wrong',
     retry:   isUrdu ? 'دوبارہ کوشش کریں' : 'Retry',
+    statusErrorTitle: isUrdu ? 'خرابی' : 'Could not update',
+    statusErrorMsg: isUrdu
+      ? 'حالت اپ ڈیٹ نہیں ہو سکی۔ انٹرنیٹ کنکشن چیک کریں اور دوبارہ کوشش کریں۔'
+      : 'Could not update the status. Check your connection and try again.',
   };
 
   const load = useCallback(() => {
     setLoading(true);
     setError(null);
     getDeviceId()
-      .then(deviceId => listDiagnoses(deviceId))
+      .then(id => {
+        setDeviceId(id);
+        return listDiagnoses(id);
+      })
       .then(data => setRecords(data))
       .catch(err => setError(err.message ?? String(err)))
       .finally(() => setLoading(false));
@@ -77,9 +91,35 @@ export default function HistoryScreen() {
     load();
   }, [load]);
 
+  // Farmer taps the status badge to flip it themselves -- ongoing <-> treated.
+  // Updates optimistically so it feels instant, and reverts if the save fails.
+  const toggleStatus = (item: DiagnosisRecord) => {
+    if (!deviceId || togglingId !== null) return;
+    const nextStatus = item.status === 'treated' ? 'ongoing' : 'treated';
+
+    setTogglingId(item.id);
+    setRecords(prev => prev.map(r => (r.id === item.id ? { ...r, status: nextStatus } : r)));
+
+    updateDiagnosisStatus(item.id, deviceId, nextStatus)
+      .catch(() => {
+        // Revert on failure and let the farmer know, rather than silently
+        // showing a status that never actually got saved.
+        setRecords(prev => prev.map(r => (r.id === item.id ? { ...r, status: item.status } : r)));
+        Alert.alert(t.statusErrorTitle, t.statusErrorMsg);
+      })
+      .finally(() => setTogglingId(null));
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
+        <TouchableOpacity
+          style={[styles.backArrowBtn, isUrdu ? styles.backArrowBtnRight : styles.backArrowBtnLeft]}
+          onPress={() => router.back()}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Text style={styles.backArrowText}>{isUrdu ? '›' : '‹'}</Text>
+        </TouchableOpacity>
         <UrduText
           isUrdu={isUrdu}
           style={styles.topbarText}
@@ -120,11 +160,12 @@ export default function HistoryScreen() {
             const animal = ANIMAL_LABELS[item.animal_type] ?? {
               en: item.animal_type, ur: item.animal_type, icon: '🐾', color: '#eeeeee',
             };
+            const sex = SEX_LABELS[item.sex] ?? { en: item.sex, ur: item.sex };
             const age = AGE_LABELS[item.age_range] ?? { en: item.age_range, ur: item.age_range };
             const disease = primaryDisease(item);
 
             return (
-              <View key={item.id} style={styles.item}>
+              <View key={item.id} style={[styles.item, isUrdu && styles.itemReversed]}>
                 <View style={[styles.iconWrap, { backgroundColor: animal.color }]}>
                   <Text style={styles.icon}>{animal.icon}</Text>
                 </View>
@@ -133,17 +174,22 @@ export default function HistoryScreen() {
                     {disease ? (isUrdu ? disease.ur : disease.en) : (isUrdu ? 'نامعلوم' : 'Unknown')}
                   </UrduText>
                   <UrduText isUrdu={isUrdu} style={[styles.animal, isUrdu && styles.rtl]}>
-                    {isUrdu ? animal.ur : animal.en} · {isUrdu ? age.ur : age.en}
+                    {isUrdu ? animal.ur : animal.en} · {isUrdu ? sex.ur : sex.en} · {isUrdu ? age.ur : age.en}
                   </UrduText>
                   <UrduText isUrdu={isUrdu} style={[styles.date, isUrdu && styles.rtl]}>
                     {formatDate(item.created_at, isUrdu)}
                   </UrduText>
                 </View>
-                <View style={[styles.badge, item.status === 'treated' ? styles.badgeTreated : styles.badgeOngoing]}>
+                <TouchableOpacity
+                  style={[styles.badge, item.status === 'treated' ? styles.badgeTreated : styles.badgeOngoing]}
+                  onPress={() => toggleStatus(item)}
+                  disabled={togglingId === item.id}
+                  activeOpacity={0.7}
+                >
                   <UrduText isUrdu={isUrdu} style={[styles.badgeText, item.status === 'treated' ? styles.badgeTreatedText : styles.badgeOngoingText]}>
                     {item.status === 'treated' ? t.treated : t.ongoing}
                   </UrduText>
-                </View>
+                </TouchableOpacity>
               </View>
             );
           })}
@@ -175,7 +221,19 @@ const styles = StyleSheet.create({
     paddingTop: 56,
     paddingBottom: 16,
     alignItems: 'center',
+    position: 'relative',
   },
+  backArrowBtn: {
+    position: 'absolute',
+    bottom: 12,
+    width: 32,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  backArrowBtnLeft:  { left: 12 },
+  backArrowBtnRight: { right: 12 },
+  backArrowText: { color: 'white', fontSize: 24, fontWeight: '700' },
   topbarText: { color: 'white', fontSize: 16, fontWeight: '600' },
   body: { padding: 14 },
   rtl: { textAlign: 'right' },
@@ -211,6 +269,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 1,
   },
+  itemReversed: { flexDirection: 'row-reverse' },
   iconWrap: {
     width: 44, height: 44,
     borderRadius: 12,

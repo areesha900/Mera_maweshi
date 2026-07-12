@@ -1,11 +1,28 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { UrduText } from '../components/UrduText';
+import { getLocalProfile } from '../lib/profile';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { lang, name } = useLocalSearchParams<{ lang: string; name: string }>();
+  const { lang, name: nameParam } = useLocalSearchParams<{ lang: string; name: string }>();
   const isUrdu = lang === 'ur';
+
+  // The name should never actually be missing (every screen that navigates
+  // here is supposed to carry it along), but if any path ever drops it,
+  // fall back to the locally cached profile rather than showing "Friend" --
+  // that cache is written once at registration and is the real source of
+  // truth for "who is this farmer", not whatever happened to survive the
+  // navigation params.
+  const [cachedName, setCachedName] = useState<string | null>(null);
+  useEffect(() => {
+    if (!nameParam) {
+      getLocalProfile().then(profile => setCachedName(profile?.name ?? null));
+    }
+  }, [nameParam]);
+
+  const name = nameParam || cachedName || '';
 
   const t = {
     appName:    isUrdu ? 'میرا مویشی'                      : 'Mera Maweshi',
@@ -49,7 +66,7 @@ export default function HomeScreen() {
         {/* History */}
         <TouchableOpacity
           style={styles.card}
-          onPress={() => router.push({ pathname: '/history', params: { lang } })}
+          onPress={() => router.push({ pathname: '/history', params: { lang, name } })}
         >
           <View style={[styles.iconWrap, { backgroundColor: '#fce4ec' }]}>
             <Text style={styles.icon}>📋</Text>
