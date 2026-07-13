@@ -3,17 +3,17 @@
 
 > An AI-powered livestock disease diagnosis app for rural farmers in Pakistan.
 
-Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu language** and receive an AI-generated disease diagnosis - no vet visit required.
+Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English** and receive an AI-generated disease diagnosis — no vet visit required. 
 
 ---
 
 ## ✨ Features
 
 - 🌐 **Multilingual** — English and Urdu
-- 🤖 **AI Diagnosis** — Fine-tuned LLM trained on livestock disease data (TBU)
-- 🩺 **Symptom Picker** — Tap-to-select symptoms (for a total of 9 organ systems)
-- 📍 **Location-aware** — Collects Province, District & Tehsil for regional outbreak tracking
+- 🤖 **Dual AI Diagnosis** — A scikit-learn model trained on real veterinary case data runs alongside a Groq-hosted LLM (Llama 3.3 70B), so results can be cross-checked instead of trusted blindly
 - 🧪 **Differential Diagnosis** — Shows the model's top-3 most likely diseases, not just the top pick
+- 🩺 **Symptom Picker** — Tap-to-select symptoms across organ systems, filtered by animal/age/sex
+- 📍 **Location-aware** — Collects Province, District & Tehsil for regional outbreak tracking
 - 🩹 **First Aid Guidance** — Practical, translated first-aid steps for each diagnosis
 - 📋 **Diagnosis History** — Tracks past diagnoses with animal, date, and recovery status
 - 🏥 **Urgency Flagging** — Highlights when a diagnosis warrants immediate veterinary attention
