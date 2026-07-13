@@ -167,8 +167,8 @@ export default function RegistrationScreen() {
       ? (isUrdu ? 'آپ کی معلومات' : 'Your Information')
       : (isUrdu ? 'اپنی معلومات درج کریں' : 'Enter Your Information'),
     lockedNote: isUrdu
-      ? '🔒 یہ معلومات محفوظ ہیں۔ تبدیلی کی سہولت جلد شامل کی جائے گی۔'
-      : '🔒 This information is locked. Editing will be available soon.',
+      ? '🔒 یہ معلومات محفوظ ہیں۔'
+      : '🔒 This information is locked right now.',
     name:     isUrdu ? 'مالک کا نام *'           : 'Owner Name *',
     phone:    isUrdu ? 'فون نمبر'               : 'Phone Number',
     province: isUrdu ? 'صوبہ *'                 : 'Province *',

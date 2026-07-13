@@ -40,7 +40,14 @@ if not DATABASE_URL:
 # Postgres (and everything else) ignores it, so it's safe to always pass.
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 
-engine = create_engine(DATABASE_URL, connect_args=connect_args)
+# pool_pre_ping tests each connection with a lightweight query right before
+# it's used, and silently reconnects if it's dead. This matters specifically
+# for providers like Neon that suspend the database after a period of no
+# traffic (their free tier "scales to zero") -- a connection sitting in the
+# pool from before the suspend is dead when the app wakes it back up, which
+# otherwise surfaces as a one-off "SSL connection has been closed
+# unexpectedly" error on whichever request happens to hit it first.
+engine = create_engine(DATABASE_URL, connect_args=connect_args, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
