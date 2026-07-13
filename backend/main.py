@@ -23,7 +23,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.disease_reference import get_reference
-from app.db import get_db, init_db
+from app.db import get_db, init_db, DATABASE_URL
 from app import models, schemas
 
 load_dotenv()
@@ -32,6 +32,15 @@ MODEL_DIR = Path(__file__).parent / "model"
 GROQ_MODEL_NAME = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 
 app = FastAPI(title="Mera Maweshi Diagnosis API")
+
+# Loud, unmissable log of which database this process is actually talking
+# to. SQLite in production means data gets wiped on every redeploy/restart --
+# if you ever see "sqlite" here on Render, DATABASE_URL isn't set and farmer
+# records will silently disappear.
+if DATABASE_URL.startswith("sqlite"):
+    print(f"!!! WARNING: running on SQLite ({DATABASE_URL}) -- data will NOT persist across redeploys/restarts. Set DATABASE_URL to use Postgres. !!!")
+else:
+    print(f"Connected to database: {DATABASE_URL.split('@')[-1] if '@' in DATABASE_URL else DATABASE_URL.split('://')[0]}")
 
 app.add_middleware(
     CORSMiddleware,

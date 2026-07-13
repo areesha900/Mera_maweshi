@@ -4,7 +4,8 @@ import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View
 import { UrduText } from '../components/UrduText';
 import { getDeviceId } from '../lib/deviceId';
 import { DiagnoseResponse, DiagnosisResult, fetchDiagnosis } from '../lib/diagnosisApi';
-import { saveDiagnosis } from '../lib/farmerApi';
+import { saveDiagnosis, upsertFarmer } from '../lib/farmerApi';
+import { getLocalProfile } from '../lib/profile';
 import { SYMPTOM_CATEGORIES } from '../lib/symptomsData';
 
 // Backend/LLM text can occasionally glue scripts together with no space
@@ -73,19 +74,43 @@ export default function ResultScreen() {
         // succeeds, so a flaky connection here shouldn't block or retry
         // against the UI; it just means this one diagnosis won't show up
         // in History later.
-        getDeviceId()
-          .then(deviceId =>
-            saveDiagnosis({
-              device_id: deviceId,
-              animal_type: animal ?? 'Cattle',
-              sex: sex ?? 'Male',
-              age_range: age ?? 'Adult',
-              symptoms: symptomList,
-              llm: result.llm,
-              model: result.model,
-            })
-          )
-          .catch(err => console.warn('Could not save diagnosis to history:', err));
+        getDeviceId().then(async deviceId => {
+          const payload = {
+            device_id: deviceId,
+            animal_type: animal ?? 'Cattle',
+            sex: sex ?? 'Male',
+            age_range: age ?? 'Adult',
+            symptoms: symptomList,
+            llm: result.llm,
+            model: result.model,
+          };
+          try {
+            await saveDiagnosis(payload);
+          } catch (err: any) {
+            // The backend rejects saves when it has no farmer profile for
+            // this device_id -- this can happen even on an already-
+            // registered device if the backend's database was ever reset
+            // (e.g. a redeploy that fell back to ephemeral storage), since
+            // the phone's local "am I registered" cache survives that but
+            // the server-side record doesn't. Self-heal once: re-send the
+            // farmer profile we still have cached locally, then retry the
+            // save. If we have no local profile either, there's nothing to
+            // recover from and we just log, same as before.
+            const isUnknownDeviceId = String(err?.message ?? '').includes('Unknown device_id');
+            if (!isUnknownDeviceId) {
+              console.warn('Could not save diagnosis to history:', err);
+              return;
+            }
+            try {
+              const cachedProfile = await getLocalProfile();
+              if (!cachedProfile) throw err;
+              await upsertFarmer({ device_id: deviceId, ...cachedProfile });
+              await saveDiagnosis(payload);
+            } catch (recoverErr) {
+              console.warn('Could not save diagnosis to history (recovery failed):', recoverErr);
+            }
+          }
+        });
       })
       .catch(err => setError(err.message ?? String(err)))
       .finally(() => setLoading(false));
