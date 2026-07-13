@@ -135,7 +135,6 @@ export default function ResultScreen() {
     newBtn:        isUrdu ? 'نئی تشخیص کریں' : 'New Diagnosis',
     homeBtn:       isUrdu ? 'ہوم'             : 'Home',
     symptomsLabel: isUrdu ? 'منتخب علامات'   : 'Selected Symptoms',
-    agree:         isUrdu ? '✓ دونوں طریقے متفق ہیں' : '✓ Both methods agree',
     unavailable:   isUrdu ? 'دستیاب نہیں'     : 'unavailable',
   };
 
@@ -147,8 +146,6 @@ export default function ResultScreen() {
     return s.replace(/_/g, ' ');
   };
 
-  const bothAgree =
-    data?.llm && data?.model && data.llm.disease_en === data.model.disease_en;
   const anySerious = Boolean(data?.llm?.serious || data?.model?.serious);
 
   return (
@@ -195,15 +192,6 @@ export default function ResultScreen() {
 
       {!loading && data && (
         <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
-
-          {bothAgree && (
-            <View style={styles.agreeBanner}>
-              <View style={styles.agreeIconWrap}>
-                <Text style={styles.agreeIcon}>✓</Text>
-              </View>
-              <UrduText isUrdu={isUrdu} style={styles.agreeText}>{t.agree}</UrduText>
-            </View>
-          )}
 
           {/* Diagnosis cards */}
           <DiagnosisCard
@@ -447,26 +435,6 @@ const styles = StyleSheet.create({
   errorText: { fontSize: 13, color: '#666', textAlign: 'center', lineHeight: 19, marginBottom: 20 },
   retryBtn: { backgroundColor: '#2d6a2d', borderRadius: 12, paddingVertical: 13, paddingHorizontal: 32, width: '100%', alignItems: 'center' },
   retryBtnText: { color: 'white', fontWeight: '600', fontSize: 14 },
-
-  agreeBanner: {
-    backgroundColor: '#e8f5e9',
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  agreeIconWrap: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    backgroundColor: '#1b5e20',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  agreeIcon: { color: 'white', fontSize: 14, fontWeight: '700' },
-  agreeText: { flex: 1, color: '#1b5e20', fontSize: 12, fontWeight: '700' },
 
   diseaseCard: {
     backgroundColor: 'white',

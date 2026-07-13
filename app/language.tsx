@@ -60,18 +60,17 @@ export default function LanguageScreen() {
         >
           <Text style={styles.backArrowText}>{selected === 'ur' ? '›' : '‹'}</Text>
         </TouchableOpacity>
-        <UrduText
+        <Text
           style={styles.topbarText}
           numberOfLines={1}
           adjustsFontSizeToFit
         >
-          زبان منتخب کریں
-        </UrduText>
+        Choose your Language
+        </Text>
       </View>
 
       <View style={styles.body}>
-        <UrduText style={styles.prompt}>اپنی زبان چنیں</UrduText>
-
+        <UrduText style={styles.prompt}>اپنی زبان منتخب کریں</UrduText>
         <TouchableOpacity
           style={[styles.option, selected === 'en' && styles.optionSelected]}
           onPress={() => setSelected('en')}
