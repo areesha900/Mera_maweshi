@@ -35,12 +35,12 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English
  
 | Layer | Technology | Purpose |
 |---|---|---|
-| Mobile App | React Native (Expo Router) | Cross-platform Android/iOS app with RTL & Urdu support |
+| Mobile App | React Native (Expo Router, Expo SDK 54) | Cross-platform Android/iOS/web app with RTL & Urdu support |
 | Backend API | FastAPI (Python) | REST API connecting the mobile app to both diagnosis sources |
-| Trained Model | scikit-learn pipeline | Classifier trained on the Maweshi dataset (animal, sex, age, symptoms → disease) |
-| LLM | Groq API — Llama 3.3 70B Versatile | Independent diagnosis for comparison against the trained model |
+| Trained Model | scikit-learn `RandomForestClassifier` | Classifier trained on the Maweshi dataset (animal, sex, age, symptoms → disease) |
+| LLM | Groq API — Llama 3.3 70B Versatile | Independent diagnosis for comparison against the trained model, constrained to the model's disease vocabulary |
+| Database | SQLAlchemy — SQLite (local) / PostgreSQL (production) | Farmer profiles and diagnosis history |
 | Hosting | Render | FastAPI + trained model hosted online so the app can reach it from anywhere |
-| Database *(in progress)* | -- | Farmer profiles, animal records, diagnosis history |
 
 ---
 
@@ -61,12 +61,35 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English
 
 ---
 
+## 📁 Project Structure
+
+```
+app/          Expo Router screens (index, language, registration, home, symptoms, result, history)
+components/   Shared UI components (UrduText, haptic tab bar, themed primitives)
+lib/          API clients (diagnosisApi, farmerApi), device ID, static Pakistan/symptom data
+constants/    Theme tokens
+backend/
+  main.py               FastAPI app: /api/diagnose, /api/farmers, /api/diagnoses, /api/health
+  app/db.py             SQLite/Postgres setup
+  app/models.py         SQLAlchemy models (Farmer, Diagnosis)
+  app/schemas.py        Pydantic request/response schemas
+  app/disease_reference.py   Curated EN/UR disease info + first-aid fallback text
+  train_model.py        Trains & serializes the Random Forest classifier
+  model/                 Serialized pipeline, label encoder, symptom columns, metrics
+previous_work/          Earlier fine-tuning exploration, Sobaina's part
+```
+
+---
+
 ## 🛣️ Roadmap
 
 - [x] UI mockups (English and Urdu)
 - [x] React Native mobile app
 - [x] FastAPI backend server
-- [x] AI model
-- [x] Farmer database & profile management (Firebase Firestore)
-- [ ] All integration : frontend + backend
+- [x] Trained diagnosis model (Random Forest, 96% accuracy)
+- [x] LLM diagnosis path (Groq/Llama 3.3) with Urdu validation and disease-vocabulary guardrails
+- [x] Farmer profiles & diagnosis history (SQLite locally, Postgres in production)
+- [x] Frontend + backend integration
+- [x] Backend deployed (Render)
 - [ ] Overall UI
+- [ ] Automated tests (backend + app)
