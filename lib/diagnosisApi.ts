@@ -30,7 +30,8 @@ export type DiagnoseRequest = {
 
 export async function fetchDiagnosis(payload: DiagnoseRequest): Promise<DiagnoseResponse> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+  // 20s: for cold-boot
+  const timeoutId = setTimeout(() => controller.abort(), 20000);
 
   let res: Response;
   try {
@@ -43,7 +44,7 @@ export async function fetchDiagnosis(payload: DiagnoseRequest): Promise<Diagnose
   } catch (err: any) {
     if (err.name === 'AbortError') {
       throw new Error(
-        `Could not reach the server at ${API_BASE_URL}. Check that your phone and computer are on the same Wi-Fi, and that the backend IP in config.ts is current.`
+        `The server is taking longer than usual to respond -- it may be waking up after being idle. Please try again in a moment.`
       );
     }
     throw err;
