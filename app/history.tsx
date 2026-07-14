@@ -27,12 +27,6 @@ const MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'
 const MONTHS_UR = ['جنوری', 'فروری', 'مارچ', 'اپریل', 'مئی', 'جون', 'جولائی', 'اگست', 'ستمبر', 'اکتوبر', 'نومبر', 'دسمبر'];
 const DAYS_EN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const DAYS_UR = ['اتوار', 'پیر', 'منگل', 'بدھ', 'جمعرات', 'جمعہ', 'ہفتہ'];
-const URDU_DIGITS = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-
-function toUrduDigits(n: number): string {
-  return String(n).replace(/[0-9]/g, d => URDU_DIGITS[Number(d)]);
-}
-
 function formatTime(d: Date, isUrdu: boolean): string {
   let hours = d.getHours();
   const minutes = d.getMinutes();
@@ -41,7 +35,7 @@ function formatTime(d: Date, isUrdu: boolean): string {
   if (hours === 0) hours = 12;
   const minutesStr = String(minutes).padStart(2, '0');
   return isUrdu
-    ? `${toUrduDigits(hours)}:${toUrduDigits(Number(minutesStr))} ${isPM ? 'شام' : 'صبح'}`
+    ? `${hours}:${minutesStr} ${isPM ? 'شام' : 'صبح'}`
     : `${hours}:${minutesStr} ${isPM ? 'PM' : 'AM'}`;
 }
 
@@ -54,7 +48,7 @@ function formatDate(iso: string, isUrdu: boolean): string {
   const weekday = d.getDay();
   const time = formatTime(d, isUrdu);
   return isUrdu
-    ? `${DAYS_UR[weekday]}، ${toUrduDigits(day)} ${MONTHS_UR[month]} ${toUrduDigits(year)} · ${time}`
+    ? `${DAYS_UR[weekday]}، ${day} ${MONTHS_UR[month]} ${year} · ${time}`
     : `${DAYS_EN[weekday]}, ${MONTHS_EN[month]} ${day}, ${year} · ${time}`;
 }
 
