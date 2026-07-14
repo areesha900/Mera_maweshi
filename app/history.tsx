@@ -25,10 +25,24 @@ const AGE_LABELS: Record<string, { en: string; ur: string }> = {
 
 const MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const MONTHS_UR = ['جنوری', 'فروری', 'مارچ', 'اپریل', 'مئی', 'جون', 'جولائی', 'اگست', 'ستمبر', 'اکتوبر', 'نومبر', 'دسمبر'];
+const DAYS_EN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const DAYS_UR = ['اتوار', 'پیر', 'منگل', 'بدھ', 'جمعرات', 'جمعہ', 'ہفتہ'];
 const URDU_DIGITS = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
 
 function toUrduDigits(n: number): string {
   return String(n).replace(/[0-9]/g, d => URDU_DIGITS[Number(d)]);
+}
+
+function formatTime(d: Date, isUrdu: boolean): string {
+  let hours = d.getHours();
+  const minutes = d.getMinutes();
+  const isPM = hours >= 12;
+  hours = hours % 12;
+  if (hours === 0) hours = 12;
+  const minutesStr = String(minutes).padStart(2, '0');
+  return isUrdu
+    ? `${toUrduDigits(hours)}:${toUrduDigits(Number(minutesStr))} ${isPM ? 'شام' : 'صبح'}`
+    : `${hours}:${minutesStr} ${isPM ? 'PM' : 'AM'}`;
 }
 
 function formatDate(iso: string, isUrdu: boolean): string {
@@ -37,9 +51,11 @@ function formatDate(iso: string, isUrdu: boolean): string {
   const day = d.getDate();
   const month = d.getMonth();
   const year = d.getFullYear();
+  const weekday = d.getDay();
+  const time = formatTime(d, isUrdu);
   return isUrdu
-    ? `${toUrduDigits(day)} ${MONTHS_UR[month]} ${toUrduDigits(year)}`
-    : `${MONTHS_EN[month]} ${day}, ${year}`;
+    ? `${DAYS_UR[weekday]}، ${toUrduDigits(day)} ${MONTHS_UR[month]} ${toUrduDigits(year)} · ${time}`
+    : `${DAYS_EN[weekday]}, ${MONTHS_EN[month]} ${day}, ${year} · ${time}`;
 }
 
 // Prefer the model's disease pick since it's grounded in real case data;
