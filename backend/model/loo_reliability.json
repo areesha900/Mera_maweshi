@@ -1,0 +1,260 @@
+{
+  "generated_at": "2026-07-15T08:34:08.790272+00:00",
+  "n_evaluated": 810,
+  "overall_loo_accuracy": 0.942,
+  "expected_calibration_error": 0.1605,
+  "min_samples_for_reliability": 5,
+  "per_disease": {
+    "Anaplasmosis": {
+      "n_samples": 8,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Anthrax": {
+      "n_samples": 10,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Arthritis": {
+      "n_samples": 1,
+      "loo_accuracy": null,
+      "reliable": false,
+      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+    },
+    "Babesiosis": {
+      "n_samples": 19,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Black Quarter": {
+      "n_samples": 22,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Digestive System Disorder": {
+      "n_samples": 12,
+      "loo_accuracy": 0.9167,
+      "reliable": true
+    },
+    "Drenching Pneumonia": {
+      "n_samples": 27,
+      "loo_accuracy": 0.963,
+      "reliable": true
+    },
+    "Fasciolosis": {
+      "n_samples": 1,
+      "loo_accuracy": null,
+      "reliable": false,
+      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+    },
+    "Foot Rot": {
+      "n_samples": 8,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Foot and Mouth Disease (FMD)": {
+      "n_samples": 56,
+      "loo_accuracy": 0.9821,
+      "reliable": true
+    },
+    "GID": {
+      "n_samples": 9,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Haemorrhagic Septicaemia": {
+      "n_samples": 42,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Hyperthermia": {
+      "n_samples": 24,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Hypothermia": {
+      "n_samples": 1,
+      "loo_accuracy": null,
+      "reliable": false,
+      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+    },
+    "Impaction/Constipation": {
+      "n_samples": 3,
+      "loo_accuracy": 0.6667,
+      "reliable": false,
+      "note": "Only 3 samples -- LOO accuracy is high-variance below 5 samples."
+    },
+    "Infectious Diarrhea": {
+      "n_samples": 8,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Injury Trauma": {
+      "n_samples": 32,
+      "loo_accuracy": 0.9688,
+      "reliable": true
+    },
+    "Jaundice": {
+      "n_samples": 8,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Lactic Acidosis": {
+      "n_samples": 2,
+      "loo_accuracy": 0.0,
+      "reliable": false,
+      "note": "Only 2 samples -- LOO accuracy is high-variance below 5 samples."
+    },
+    "Mange Infestation": {
+      "n_samples": 11,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Mastitis": {
+      "n_samples": 68,
+      "loo_accuracy": 0.9706,
+      "reliable": true
+    },
+    "Milk Fever": {
+      "n_samples": 2,
+      "loo_accuracy": 1.0,
+      "reliable": false,
+      "note": "Only 2 samples -- LOO accuracy is high-variance below 5 samples."
+    },
+    "PPR": {
+      "n_samples": 15,
+      "loo_accuracy": 0.7333,
+      "reliable": true
+    },
+    "Phosphorus Deficiency": {
+      "n_samples": 8,
+      "loo_accuracy": 0.875,
+      "reliable": true
+    },
+    "Plant/Feed Toxicity": {
+      "n_samples": 8,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Pyrexia/ Infection/ Inflammation": {
+      "n_samples": 85,
+      "loo_accuracy": 0.9294,
+      "reliable": true
+    },
+    "Rabies and Injury": {
+      "n_samples": 1,
+      "loo_accuracy": null,
+      "reliable": false,
+      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+    },
+    "Sheep n Goat Pox": {
+      "n_samples": 1,
+      "loo_accuracy": null,
+      "reliable": false,
+      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+    },
+    "Theileriosis": {
+      "n_samples": 68,
+      "loo_accuracy": 0.9706,
+      "reliable": true
+    },
+    "Throat Infection": {
+      "n_samples": 1,
+      "loo_accuracy": null,
+      "reliable": false,
+      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+    },
+    "Tick Infestation": {
+      "n_samples": 32,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Trypanosomiasis": {
+      "n_samples": 1,
+      "loo_accuracy": null,
+      "reliable": false,
+      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+    },
+    "Tympany/ Bloat": {
+      "n_samples": 5,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Upper Respiratory Tract Infection": {
+      "n_samples": 47,
+      "loo_accuracy": 0.9362,
+      "reliable": true
+    },
+    "Urine Retention": {
+      "n_samples": 6,
+      "loo_accuracy": 1.0,
+      "reliable": true
+    },
+    "Vitamins and Minerals Deficiency": {
+      "n_samples": 26,
+      "loo_accuracy": 0.8462,
+      "reliable": true
+    },
+    "Worm Infestation": {
+      "n_samples": 132,
+      "loo_accuracy": 0.9167,
+      "reliable": true
+    }
+  },
+  "calibration_curve": [
+    {
+      "confidence_range": "0.1-0.2",
+      "count": 7,
+      "mean_predicted_confidence": 0.1724,
+      "actual_accuracy": 0.2857
+    },
+    {
+      "confidence_range": "0.2-0.3",
+      "count": 13,
+      "mean_predicted_confidence": 0.2591,
+      "actual_accuracy": 0.6154
+    },
+    {
+      "confidence_range": "0.3-0.4",
+      "count": 30,
+      "mean_predicted_confidence": 0.3457,
+      "actual_accuracy": 0.5333
+    },
+    {
+      "confidence_range": "0.4-0.5",
+      "count": 38,
+      "mean_predicted_confidence": 0.4522,
+      "actual_accuracy": 0.7105
+    },
+    {
+      "confidence_range": "0.5-0.6",
+      "count": 71,
+      "mean_predicted_confidence": 0.5538,
+      "actual_accuracy": 0.8592
+    },
+    {
+      "confidence_range": "0.6-0.7",
+      "count": 86,
+      "mean_predicted_confidence": 0.6542,
+      "actual_accuracy": 0.9884
+    },
+    {
+      "confidence_range": "0.7-0.8",
+      "count": 101,
+      "mean_predicted_confidence": 0.7533,
+      "actual_accuracy": 0.9901
+    },
+    {
+      "confidence_range": "0.8-0.9",
+      "count": 158,
+      "mean_predicted_confidence": 0.8504,
+      "actual_accuracy": 1.0
+    },
+    {
+      "confidence_range": "0.9-1.0",
+      "count": 306,
+      "mean_predicted_confidence": 0.9635,
+      "actual_accuracy": 1.0
+    }
+  ]
+}

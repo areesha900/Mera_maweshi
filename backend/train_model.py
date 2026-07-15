@@ -15,18 +15,16 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import LabelEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score
 
+from features import CATEGORICAL_COLS, TARGET_COL, load_dataset, get_symptom_cols, build_preprocessor
+
 DATA_PATH = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("maweshi_preprocessed.csv")
 MODEL_DIR = Path(__file__).parent / "model"
 MODEL_DIR.mkdir(exist_ok=True)
-
-CATEGORICAL_COLS = ["Name", "SexType", "AgeRange"]  # Name = animal species
-TARGET_COL = "DiseaseName"
 
 
 def manual_stratified_split(X, y, test_frac=0.2, min_train=1, seed=42):
@@ -50,23 +48,14 @@ def manual_stratified_split(X, y, test_frac=0.2, min_train=1, seed=42):
 
 
 def main():
-    df = pd.read_csv(DATA_PATH)
-    df = df.dropna(subset=[TARGET_COL])
-
-    symptom_cols = [c for c in df.columns if c not in CATEGORICAL_COLS + [TARGET_COL]]
+    df = load_dataset(DATA_PATH)
+    symptom_cols = get_symptom_cols(df)
 
     X = df[CATEGORICAL_COLS + symptom_cols].copy()
     y = df[TARGET_COL].copy()
 
     label_encoder = LabelEncoder()
     y_enc = label_encoder.fit_transform(y)
-
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ("cat", OneHotEncoder(handle_unknown="ignore"), CATEGORICAL_COLS),
-        ],
-        remainder="passthrough",  # symptom binary columns pass through as-is
-    )
 
     candidates = {
         "random_forest": RandomForestClassifier(
@@ -82,7 +71,7 @@ def main():
     results = {}
     best_name, best_pipe, best_score = None, None, -1
     for name, clf in candidates.items():
-        pipe = Pipeline([("prep", preprocessor), ("clf", clf)])
+        pipe = Pipeline([("prep", build_preprocessor()), ("clf", clf)])
         pipe.fit(X_train, y_train)
         preds = pipe.predict(X_test)
         acc = accuracy_score(y_test, preds)
@@ -96,7 +85,7 @@ def main():
 
     # Refit the winning pipeline on ALL data for production use (more coverage,
     # important given several disease classes only have 1-3 samples total).
-    final_pipe = Pipeline([("prep", preprocessor), ("clf", candidates[best_name])])
+    final_pipe = Pipeline([("prep", build_preprocessor()), ("clf", candidates[best_name])])
     final_pipe.fit(X, y_enc)
 
     joblib.dump(final_pipe, MODEL_DIR / "pipeline.joblib")
@@ -111,6 +100,8 @@ def main():
         )
 
     print(f"\nSaved model artifacts to {MODEL_DIR}/")
+    print("Chosen model type is recorded in metrics.json -- evaluate_loo.py reads it")
+    print("so the LOO evaluation always mirrors whatever train_model.py just shipped.")
 
 
 if __name__ == "__main__":
