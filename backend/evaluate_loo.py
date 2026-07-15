@@ -1,28 +1,6 @@
 """
 Leave-one-out (LOO) evaluation of the production model.
 
-This is NOT a third predictor. It never runs for a live farmer request.
-It's an offline report you run once (after train_model.py, or whenever the
-dataset changes) that answers: "when the model has never seen this exact
-case before, how often is it right -- broken down by disease?"
-
-The output, model/loo_reliability.json, is what main.py can later load and
-use to attach a trust weight to the trained model's live prediction.
-
-Mechanics, per row i of the dataset:
-    1. Remove row i entirely.
-    2. Fit a fresh copy of the SAME pipeline (same model type/params
-       train_model.py chose) on the remaining rows.
-    3. Predict row i. Record: predicted disease, true disease, and the
-       model's confidence (probability it assigned to its own top pick).
-    4. Put row i back, move to row i+1.
-
-Known limitation, flagged explicitly in the output: a disease with only 1
-sample in the whole dataset can never be evaluated by LOO, because holding
-out its only example leaves the model with zero training examples of it.
-Those diseases are reported as "insufficient_data" rather than given a
-(meaningless) accuracy number.
-
 Usage:
     python evaluate_loo.py /path/to/maweshi_preprocessed.csv
 """
@@ -104,16 +82,14 @@ def build_per_disease_report(true_labels, pred_labels, label_encoder, class_coun
                 "n_samples": n_samples,
                 "loo_accuracy": None,
                 "reliable": False,
-                "note": "Only 1 sample in dataset -- LOO cannot evaluate this "
-                        "disease (holding out its only example leaves zero "
-                        "training examples of it).",
+                "note": "Only 1 sample in dataset - LOO cannot evaluate this disease.",
             }
             continue
         acc = float(correct[mask].mean())
         reliable = n_samples >= MIN_SAMPLES_FOR_RELIABILITY
         entry = {
             "n_samples": n_samples,
-            "loo_accuracy": round(acc, 4),
+            "loo_accuracy_pct": round(acc * 100, 2),
             "reliable": reliable,
         }
         if not reliable:
@@ -139,13 +115,13 @@ def build_calibration_curve(confidences, correct, n_bins=10):
         bin_acc = float(correct[in_bin].mean())
         bin_conf = float(confidences[in_bin].mean())
         curve.append({
-            "confidence_range": f"{lo:.1f}-{hi:.1f}",
+            "confidence_range_pct": f"{lo * 100:.0f}-{hi * 100:.0f}%",
             "count": count,
-            "mean_predicted_confidence": round(bin_conf, 4),
-            "actual_accuracy": round(bin_acc, 4),
+            "mean_predicted_confidence_pct": round(bin_conf * 100, 2),
+            "actual_accuracy_pct": round(bin_acc * 100, 2),
         })
         ece += (count / n) * abs(bin_acc - bin_conf)
-    return curve, round(ece, 4)
+    return curve, round(ece * 100, 2)
 
 
 def main():
@@ -184,8 +160,8 @@ def main():
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "n_evaluated": len(X),
-        "overall_loo_accuracy": round(overall_accuracy, 4),
-        "expected_calibration_error": ece,
+        "overall_loo_accuracy_pct": round(overall_accuracy * 100, 2),
+        "expected_calibration_error_pct": ece,
         "min_samples_for_reliability": MIN_SAMPLES_FOR_RELIABILITY,
         "per_disease": per_disease,
         "calibration_curve": calibration_curve,
