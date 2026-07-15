@@ -32,6 +32,46 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English
 <img width="220" height="477" alt="13" src="https://github.com/user-attachments/assets/cac2228d-1265-4bc4-9e67-ff330390acfd" />
 <img width="220" height="477" alt="14" src="https://github.com/user-attachments/assets/4d88e42b-f366-43a7-aad2-58f3b186af6f" />
 
+### English Mockups - 2
+
+<table>
+<tr>
+<td align="center" width="25%">
+<img src="https://github.com/user-attachments/assets/36dd9777-7aa9-4c9a-850b-48b6087680ab" width="180"/><br/>
+<sub><b>Welcome</b></sub>
+</td>
+<td align="center" width="25%">
+<img src="https://github.com/user-attachments/assets/32f7a0dd-2da3-4f53-8f18-74374347bde5" width="180"/><br/>
+<sub><b>Choose language</b></sub>
+</td>
+<td align="center" width="25%">
+<img src="https://github.com/user-attachments/assets/fdfc5cb6-a578-4d5f-9eaa-4ac34121e0ce" width="180"/><br/>
+<sub><b>Home</b></sub>
+</td>
+<td align="center" width="25%">
+<img src="https://github.com/user-attachments/assets/54cfa303-8c75-4f3f-a40c-aec59ef37b47" width="180"/><br/>
+<sub><b>Owner details</b></sub>
+</td>
+</tr>
+<tr>
+<td align="center">
+<img src="https://github.com/user-attachments/assets/6d0714de-2970-4c01-bd8a-3170b4ba296a" width="180"/><br/>
+<sub><b>Select symptoms</b></sub>
+</td>
+<td align="center">
+<img src="https://github.com/user-attachments/assets/91b13729-ff18-4eda-82a7-a982a29fb7ff" width="180"/><br/>
+<sub><b>Diagnosis result (LLM)</b></sub>
+</td>
+<td align="center">
+<img src="https://github.com/user-attachments/assets/cac2228d-1265-4bc4-9e67-ff330390acfd" width="180"/><br/>
+<sub><b>Diagnosis result (model)</b></sub>
+</td>
+<td align="center">
+<img src="https://github.com/user-attachments/assets/4d88e42b-f366-43a7-aad2-58f3b186af6f" width="180"/><br/>
+<sub><b>Diagnosis history</b></sub>
+</td>
+</tr>
+</table>
 
 ### Urdu Mockups
 <img width="220" height="477" alt="1" src="https://github.com/user-attachments/assets/c799886a-02e9-40ab-ae60-d73dd29b6c40" />
