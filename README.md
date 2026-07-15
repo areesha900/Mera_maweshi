@@ -21,6 +21,8 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English
 
 ## 📱 Mockups
 
+### Engliah Mockups
+
 <img width="242" height="449" alt="image" src="https://github.com/user-attachments/assets/482073fa-7c6a-4c9a-a52c-93d1e626ed3d" />
 <img width="241" height="461" alt="image" src="https://github.com/user-attachments/assets/47f9af1b-2133-4765-b46d-2365d1c60e8b" />
 <img width="236" height="455" alt="image" src="https://github.com/user-attachments/assets/5fd1109c-849a-458e-a952-878b4401eb74" />
@@ -28,6 +30,10 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English
 <img width="247" height="461" alt="image" src="https://github.com/user-attachments/assets/a4a03a38-8797-4425-85a6-63870bade541" />
 <img width="244" height="456" alt="image" src="https://github.com/user-attachments/assets/73c1719a-c6d5-4922-8283-91bc63ff8e62" />
 <img width="245" height="458" alt="image" src="https://github.com/user-attachments/assets/7cb12b8c-7060-4580-853d-09bdf736dde5" />
+
+
+### Urdu Mockups
+
 
 ---
  
