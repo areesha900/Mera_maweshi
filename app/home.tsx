@@ -47,7 +47,7 @@ export default function HomeScreen() {
           style={styles.card}
           onPress={() => router.push({ pathname: '/symptoms', params: { lang, name } })}
         >
-          <View style={[styles.iconWrap, { backgroundColor: '#e8f5e9' }]}>
+          <View style={[styles.iconWrap, { backgroundColor: '#d6f6d9' }]}>
             <Text style={styles.icon}>🔍</Text>
           </View>
           <View style={styles.cardText}>
@@ -62,7 +62,7 @@ export default function HomeScreen() {
           style={styles.card}
           onPress={() => router.push({ pathname: '/history', params: { lang, name } })}
         >
-          <View style={[styles.iconWrap, { backgroundColor: '#fce4ec' }]}>
+          <View style={[styles.iconWrap, { backgroundColor: '#fbdde7' }]}>
             <Text style={styles.icon}>📋</Text>
           </View>
           <View style={styles.cardText}>
@@ -77,7 +77,7 @@ export default function HomeScreen() {
           style={styles.card}
           onPress={() => router.push({ pathname: '/profile', params: { lang, name } })}
         >
-          <View style={[styles.iconWrap, { backgroundColor: '#e3f2fd' }]}>
+          <View style={[styles.iconWrap, { backgroundColor: '#d7ecfb' }]}>
             <Text style={styles.icon}>👤</Text>
           </View>
           <View style={styles.cardText}>
@@ -92,7 +92,7 @@ export default function HomeScreen() {
           style={styles.card}
           onPress={() => router.push('/language')}
         >
-          <View style={[styles.iconWrap, { backgroundColor: '#f3e5f5' }]}>
+          <View style={[styles.iconWrap, { backgroundColor: '#f2f4d8' }]}>
             <Text style={styles.icon}>🌐</Text>
           </View>
           <View style={styles.cardText}>

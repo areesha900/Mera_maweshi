@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   infoRowLast:{ borderBottomWidth: 0 },
   infoRowRtl: { flexDirection: 'row-reverse' },
   infoLabel:  { fontSize: 12.5, color: '#888' },
-  infoValue:  { fontSize: 13.5, color: '#222', fontWeight: '600', textAlign: 'right' },
+  infoValue:  { fontSize: 13.5, color: '#504f4f', fontWeight: '500', textAlign: 'right' },
   rtl:        { textAlign: 'right' },
   btn:        { backgroundColor: '#2d6a2d', borderRadius: 10, padding: 14, alignItems: 'center', marginTop: 18 },
   btnText:    { color: 'white', fontSize: 14, fontWeight: '600' },

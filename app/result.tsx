@@ -8,23 +8,7 @@ import { saveDiagnosis, upsertFarmer } from '../lib/farmerApi';
 import { getLocalProfile } from '../lib/profile';
 import { SYMPTOM_CATEGORIES } from '../lib/symptomsData';
 
-// Backend/LLM text can occasionally glue scripts together with no space
-// (e.g. a stray run of Cyrillic/Devanagari fused to Urdu). RN's <Text> can't
-// break mid-word, so one long unbroken run can force a card wider than its
-// container. This inserts an invisible zero-width space every `maxRun`
-// characters inside any "word" longer than that, so it always has a place
-// to wrap -- it doesn't change what's displayed, only where it can break.
-//
-// IMPORTANT: this must never insert a break inside an Arabic/Urdu cursive
-// run. Arabic letters are shaped based on their neighbours (initial/medial/
-// final/isolated forms), and a zero-width space is a non-joining character --
-// it forces the letters on either side of it into isolated/final forms even
-// though nothing actually wraps there. That's what caused Urdu text (first
-// aid steps, disease names, reasoning) to render as disconnected letters
-// instead of proper joined Nastaliq script. So we only chunk runs made of
-// non-Arabic characters and leave any Arabic-script run completely untouched,
-// no matter how long it is -- Urdu words don't need this fix in the first
-// place since RN wraps fine at real spaces.
+
 const ARABIC_SCRIPT_CHARS =
   '\\u0600-\\u06FF\\u0750-\\u077F\\u08A0-\\u08FF\\uFB50-\\uFDFF\\uFE70-\\uFEFF\\u200C\\u200D';
 const NON_ARABIC_RUN = new RegExp(`[^${ARABIC_SCRIPT_CHARS}]+`, 'g');
@@ -153,7 +137,7 @@ export default function ResultScreen() {
       <View style={styles.topbar}>
         <TouchableOpacity
           style={[styles.backArrowBtn, isUrdu ? styles.backArrowBtnRight : styles.backArrowBtnLeft]}
-          onPress={() => router.back()}
+          onPress={() => router.push({ pathname: '/symptoms', params: { lang, name } })}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Text style={styles.backArrowText}>{isUrdu ? '›' : '‹'}</Text>

@@ -70,7 +70,7 @@ export default function SymptomsScreen() {
       <View style={styles.topbar}>
         <TouchableOpacity
           style={[styles.backArrowBtn, isUrdu ? styles.backArrowBtnRight : styles.backArrowBtnLeft]}
-          onPress={() => router.back()}
+          onPress={() => router.push({ pathname: '/home', params: { lang, name } })}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Text style={styles.backArrowText}>{isUrdu ? '›' : '‹'}</Text>
