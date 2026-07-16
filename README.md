@@ -27,6 +27,8 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English
 <img width="220" height="477" alt="2" src="https://github.com/user-attachments/assets/32f7a0dd-2da3-4f53-8f18-74374347bde5" />
 <img width="220" height="477" alt="3" src="https://github.com/user-attachments/assets/fdfc5cb6-a578-4d5f-9eaa-4ac34121e0ce" />
 <img width="220" height="477" alt="5" src="https://github.com/user-attachments/assets/54cfa303-8c75-4f3f-a40c-aec59ef37b47" />
+<img width="720" height="1600" alt="16" src="https://github.com/user-attachments/assets/3f92638f-7be0-4c0d-8edf-ccc851f25f78" />
+
 <img width="220" height="477" alt="8" src="https://github.com/user-attachments/assets/6d0714de-2970-4c01-bd8a-3170b4ba296a" />
 <img width="220" height="477" alt="12" src="https://github.com/user-attachments/assets/91b13729-ff18-4eda-82a7-a982a29fb7ff" />
 <img width="220" height="477" alt="13" src="https://github.com/user-attachments/assets/cac2228d-1265-4bc4-9e67-ff330390acfd" />
@@ -37,6 +39,8 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English
 <img width="220" height="477" alt="2" src="https://github.com/user-attachments/assets/d23a8d99-69ad-45ea-ac16-2c36f79accf8" />
 <img width="220" height="477" alt="4" src="https://github.com/user-attachments/assets/fc63ca35-7aa6-4435-b8ca-0e90ec1a0796" />
 <img width="220" height="477" alt="6" src="https://github.com/user-attachments/assets/5ca1377e-679f-4b6c-ad19-07d32ea76c18" />
+<img width="720" height="1600" alt="17" src="https://github.com/user-attachments/assets/fe5ef0d9-4ba6-4d92-a718-0eb56ab5d0fd" />
+
 <img width="220" height="477" alt="9" src="https://github.com/user-attachments/assets/bf4bb010-d484-4716-9c56-ae574e2960ba" />
 <img width="220" height="477" alt="10" src="https://github.com/user-attachments/assets/862124f2-bb19-4947-bf7f-b66d4c37d094" />
 <img width="220" height="477" alt="11" src="https://github.com/user-attachments/assets/43e545ad-b22e-474a-9e9b-48e5a29a2916" />
