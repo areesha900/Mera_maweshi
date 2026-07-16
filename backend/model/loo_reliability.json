@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T08:34:08.790272+00:00",
+  "generated_at": "2026-07-16T07:59:22.339835+00:00",
   "n_evaluated": 810,
   "overall_loo_accuracy_pct": 94.2,
   "expected_calibration_error_pct": 16.05,
@@ -17,9 +17,9 @@
     },
     "Arthritis": {
       "n_samples": 1,
-      "loo_accuracy_pct": null,
+      "loo_accuracy": null,
       "reliable": false,
-      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+      "note": "Only 1 sample in dataset - LOO cannot evaluate this disease."
     },
     "Babesiosis": {
       "n_samples": 19,
@@ -43,9 +43,9 @@
     },
     "Fasciolosis": {
       "n_samples": 1,
-      "loo_accuracy_pct": null,
+      "loo_accuracy": null,
       "reliable": false,
-      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+      "note": "Only 1 sample in dataset - LOO cannot evaluate this disease."
     },
     "Foot Rot": {
       "n_samples": 8,
@@ -74,15 +74,15 @@
     },
     "Hypothermia": {
       "n_samples": 1,
-      "loo_accuracy_pct": null,
+      "loo_accuracy": null,
       "reliable": false,
-      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+      "note": "Only 1 sample in dataset - LOO cannot evaluate this disease."
     },
     "Impaction/Constipation": {
       "n_samples": 3,
       "loo_accuracy_pct": 66.67,
       "reliable": false,
-      "note": "Only 3 samples -- LOO accuracy is high-variance below 5 samples."
+      "note": "Only 3 samples - LOO accuracy is high-variance below 5 samples."
     },
     "Infectious Diarrhea": {
       "n_samples": 8,
@@ -103,7 +103,7 @@
       "n_samples": 2,
       "loo_accuracy_pct": 0.0,
       "reliable": false,
-      "note": "Only 2 samples -- LOO accuracy is high-variance below 5 samples."
+      "note": "Only 2 samples - LOO accuracy is high-variance below 5 samples."
     },
     "Mange Infestation": {
       "n_samples": 11,
@@ -119,7 +119,7 @@
       "n_samples": 2,
       "loo_accuracy_pct": 100.0,
       "reliable": false,
-      "note": "Only 2 samples -- LOO accuracy is high-variance below 5 samples."
+      "note": "Only 2 samples - LOO accuracy is high-variance below 5 samples."
     },
     "PPR": {
       "n_samples": 15,
@@ -143,15 +143,15 @@
     },
     "Rabies and Injury": {
       "n_samples": 1,
-      "loo_accuracy_pct": null,
+      "loo_accuracy": null,
       "reliable": false,
-      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+      "note": "Only 1 sample in dataset - LOO cannot evaluate this disease."
     },
     "Sheep n Goat Pox": {
       "n_samples": 1,
-      "loo_accuracy_pct": null,
+      "loo_accuracy": null,
       "reliable": false,
-      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+      "note": "Only 1 sample in dataset - LOO cannot evaluate this disease."
     },
     "Theileriosis": {
       "n_samples": 68,
@@ -160,9 +160,9 @@
     },
     "Throat Infection": {
       "n_samples": 1,
-      "loo_accuracy_pct": null,
+      "loo_accuracy": null,
       "reliable": false,
-      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+      "note": "Only 1 sample in dataset - LOO cannot evaluate this disease."
     },
     "Tick Infestation": {
       "n_samples": 32,
@@ -171,9 +171,9 @@
     },
     "Trypanosomiasis": {
       "n_samples": 1,
-      "loo_accuracy_pct": null,
+      "loo_accuracy": null,
       "reliable": false,
-      "note": "Only 1 sample in dataset -- LOO cannot evaluate this disease."
+      "note": "Only 1 sample in dataset - LOO cannot evaluate this disease."
     },
     "Tympany/ Bloat": {
       "n_samples": 5,

@@ -9,12 +9,6 @@ export default function HomeScreen() {
   const { lang, name: nameParam } = useLocalSearchParams<{ lang: string; name: string }>();
   const isUrdu = lang === 'ur';
 
-  // The name should never actually be missing (every screen that navigates
-  // here is supposed to carry it along), but if any path ever drops it,
-  // fall back to the locally cached profile rather than showing "Friend" --
-  // that cache is written once at registration and is the real source of
-  // truth for "who is this farmer", not whatever happened to survive the
-  // navigation params.
   const [cachedName, setCachedName] = useState<string | null>(null);
   useEffect(() => {
     if (!nameParam) {
@@ -81,7 +75,7 @@ export default function HomeScreen() {
         {/* Profile */}
         <TouchableOpacity
           style={styles.card}
-          onPress={() => router.push({ pathname: '/registration', params: { lang, name } })}
+          onPress={() => router.push({ pathname: '/profile', params: { lang, name } })}
         >
           <View style={[styles.iconWrap, { backgroundColor: '#e3f2fd' }]}>
             <Text style={styles.icon}>👤</Text>

@@ -93,7 +93,7 @@ def build_per_disease_report(true_labels, pred_labels, label_encoder, class_coun
             "reliable": reliable,
         }
         if not reliable:
-            entry["note"] = (f"Only {n_samples} samples -- LOO accuracy is "
+            entry["note"] = (f"Only {n_samples} samples - LOO accuracy is "
                               f"high-variance below {MIN_SAMPLES_FOR_RELIABILITY} samples.")
         report[disease] = entry
     return report
@@ -148,7 +148,7 @@ def main():
 
     model_name = get_chosen_model_name()
     print(f"Evaluating '{model_name}' (matches the model train_model.py shipped)")
-    print(f"Running leave-one-out over {len(X)} rows -- this retrains the "
+    print(f"Running leave-one-out over {len(X)} rows - this retrains the "
           f"model once per row, so it will take a few minutes.")
     true_labels, pred_labels, confidences = run_loo(X, y_enc, label_encoder, model_name)
     correct = (true_labels == pred_labels)
