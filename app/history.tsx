@@ -1,5 +1,6 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { UrduText } from '../components/UrduText';
 import { getDeviceId } from '../lib/deviceId';
@@ -97,9 +98,14 @@ export default function HistoryScreen() {
       .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    load();
-  }, [load]);
+  // Reload every time this screen regains focus -- not just on first mount --
+  // so a status change made on the History Detail screen (or anywhere else)
+  // is reflected here without needing to pass state back through navigation.
+  useFocusEffect(
+    useCallback(() => {
+      load();
+    }, [load])
+  );
 
   // Farmer taps the status badge to flip it themselves -- ongoing <-> treated.
   // Updates optimistically so it feels instant, and reverts if the save fails.
@@ -175,7 +181,17 @@ export default function HistoryScreen() {
             const disease = primaryDisease(item);
 
             return (
-              <View key={item.id} style={[styles.item, isUrdu && styles.itemReversed]}>
+              <TouchableOpacity
+                key={item.id}
+                style={[styles.item, isUrdu && styles.itemReversed]}
+                activeOpacity={0.7}
+                onPress={() =>
+                  router.push({
+                    pathname: '/history-detail',
+                    params: { lang, name, record: JSON.stringify(item) },
+                  })
+                }
+              >
                 <View style={[styles.iconWrap, { backgroundColor: animal.color }]}>
                   <Text style={styles.icon}>{animal.icon}</Text>
                 </View>
@@ -200,7 +216,7 @@ export default function HistoryScreen() {
                     {item.status === 'treated' ? t.treated : t.ongoing}
                   </UrduText>
                 </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
             );
           })}
           <View style={{ height: 30 }} />

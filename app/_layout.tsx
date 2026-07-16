@@ -30,6 +30,7 @@ export default function RootLayout() {
         <Stack.Screen name="symptoms" />
         <Stack.Screen name="result" />
         <Stack.Screen name="history" />
+        <Stack.Screen name="history-detail" />
       </Stack>
     </UrduFontContext.Provider>
   );
