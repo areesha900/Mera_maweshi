@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Literal, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_serializer
 
 
 # ---------- Farmers ----------
@@ -26,6 +26,13 @@ class FarmerOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+    @field_serializer("created_at")
+    def _serialize_created_at(self, dt: datetime, _info):
+        # for local time display
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.isoformat()
 
 
 # ---------- Diagnoses ----------
@@ -71,7 +78,13 @@ class DiagnosisOut(BaseModel):
     class Config:
         from_attributes = True
 
+    @field_serializer("created_at")
+    def _serialize_created_at(self, dt: datetime, _info):
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.isoformat()
+
 
 class DiagnosisStatusIn(BaseModel):
-    device_id: str  # must match the record's owner -- see note in the PATCH route
+    device_id: str  # must match the record's owner
     status: Literal["ongoing", "treated"]

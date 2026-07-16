@@ -126,8 +126,8 @@ export default function ResultScreen() {
     loading:    isUrdu ? 'تشخیص ہو رہی ہے...' : 'Diagnosing...',
     errorTitle: isUrdu ? 'خرابی'              : 'Something went wrong',
     retry:      isUrdu ? 'دوبارہ کوشش کریں'   : 'Retry',
-    llmLabel:   isUrdu ? '🤖 اے آئی تشخیص'    : '🤖 AI Diagnosis (LLM)',
-    modelLabel: isUrdu ? '📊 ہمارا ماڈل'       : '📊 Our Trained Model',
+    llmLabel:   isUrdu ? '🤖 اے آئی تشخیص'    : '🤖 AI Diagnosis',
+    modelLabel: isUrdu ? '📊 ہمارا ماڈل'       : '📊 Model Diagnosis',
     confidence: isUrdu ? '% یقین'             : '% confidence',
     vetMsg:     isUrdu
       ? 'یہ سنگین بیماری ہے — فوری ڈاکٹر سے رابطہ کریں'

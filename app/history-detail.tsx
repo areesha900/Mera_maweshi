@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { UrduText } from '../components/UrduText';
 import { getDeviceId } from '../lib/deviceId';
 import { DiagnosisRecord, updateDiagnosisStatus } from '../lib/farmerApi';
@@ -84,6 +85,7 @@ function formatDate(iso: string, isUrdu: boolean): string {
 
 export default function HistoryDetailScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { lang, name, record: recordParam } = useLocalSearchParams<{
     lang: string; name: string; record: string;
   }>();
@@ -97,8 +99,8 @@ export default function HistoryDetailScreen() {
     title:      isUrdu ? 'تشخیص کی تفصیل'      : 'Diagnosis Details',
     ongoing:    isUrdu ? 'جاری'                : 'Ongoing',
     treated:    isUrdu ? 'ٹھیک'                : 'Treated',
-    llmLabel:   isUrdu ? '🤖 اے آئی تشخیص'      : '🤖 AI Diagnosis (LLM)',
-    modelLabel: isUrdu ? '📊 ہمارا ماڈل'        : '📊 Our Trained Model',
+    llmLabel:   isUrdu ? '🤖 اے آئی تشخیص'      : '🤖 AI Diagnosis',
+    modelLabel: isUrdu ? '📊 ہمارا ماڈل'        : '📊 Model Diagnosis',
     confidence: isUrdu ? '% یقین'               : '% confidence',
     unavailable: isUrdu ? 'دستیاب نہیں'          : 'unavailable',
     firstAid:   isUrdu ? 'ابتدائی طبی امداد'    : 'First Aid Advice',
@@ -107,7 +109,7 @@ export default function HistoryDetailScreen() {
     vetMsg:     isUrdu
       ? 'یہ سنگین بیماری ہے — فوری ڈاکٹر سے رابطہ کریں'
       : 'This is serious — contact a vet immediately',
-    backBtn:    isUrdu ? 'واپس تاریخ پر جائیں'  : 'Back to History',
+    backBtn:    isUrdu ? 'واپس جائیں'  : 'Back to History',
     statusErrorTitle: isUrdu ? 'خرابی' : 'Could not update',
     statusErrorMsg: isUrdu
       ? 'حالت اپ ڈیٹ نہیں ہو سکی۔ انٹرنیٹ کنکشن چیک کریں اور دوبارہ کوشش کریں۔'
@@ -232,7 +234,7 @@ export default function HistoryDetailScreen() {
           </UrduText>
         </TouchableOpacity>
 
-        <View style={{ height: 30 }} />
+        <View style={{ height: 20 + insets.bottom }} />
       </ScrollView>
     </View>
   );
@@ -445,6 +447,6 @@ const styles = StyleSheet.create({
   vetIcon: { fontSize: 22 },
   vetText: { flex: 1, fontSize: 12, color: '#e65100', lineHeight: 20 },
 
-  backBtn: { backgroundColor: '#2d6a2d', borderRadius: 12, padding: 14, alignItems: 'center', marginTop: 4 },
+  backBtn: { backgroundColor: '#2d6a2d', borderRadius: 12, padding: 16, alignItems: 'center', marginTop: 4 },
   backBtnText: { color: 'white', fontSize: 14, fontWeight: '600' },
 });
