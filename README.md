@@ -31,6 +31,7 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English
 <img width="220" height="477" alt="12" src="https://github.com/user-attachments/assets/91b13729-ff18-4eda-82a7-a982a29fb7ff" />
 <img width="220" height="477" alt="13" src="https://github.com/user-attachments/assets/cac2228d-1265-4bc4-9e67-ff330390acfd" />
 <img width="220" height="477" alt="14" src="https://github.com/user-attachments/assets/4d88e42b-f366-43a7-aad2-58f3b186af6f" />
+<img width="220" height="477" alt="18" src="https://github.com/user-attachments/assets/e09cf5ce-0216-41a2-9c41-b4b6d6bff762" />
 
 ### Urdu Mockups
 <img width="220" height="477" alt="1" src="https://github.com/user-attachments/assets/c799886a-02e9-40ab-ae60-d73dd29b6c40" />
@@ -41,7 +42,7 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English
 <img width="220" height="477" alt="10" src="https://github.com/user-attachments/assets/862124f2-bb19-4947-bf7f-b66d4c37d094" />
 <img width="220" height="477" alt="11" src="https://github.com/user-attachments/assets/43e545ad-b22e-474a-9e9b-48e5a29a2916" />
 <img width="220" height="477" alt="15" src="https://github.com/user-attachments/assets/2c21f8e9-691e-4b47-bf60-c16c5afcc4d6" />
-
+<img width="220" height="477" alt="19" src="https://github.com/user-attachments/assets/092a8970-03f5-47aa-a75e-f39cde911946" />
 
 ---
  
