@@ -117,6 +117,20 @@ previous_work/            Sobaina's part
 
 ---
 
+## 🔌 API Endpoints
+ 
+| Method | Path | Purpose |
+|---|---|---|
+| `POST` | `/api/diagnose` | Runs the trained model, feeds its top-3 into the LLM prompt, returns both diagnoses side-by-side |
+| `POST` | `/api/farmers` | Create/update a farmer profile |
+| `GET` | `/api/farmers/{device_id}` | Fetch a farmer profile |
+| `POST` | `/api/diagnoses` | Save a diagnosis result to history |
+| `GET` | `/api/diagnoses?device_id=...` | List a device's diagnosis history, most recent first |
+| `PATCH` | `/api/diagnoses/{diagnosis_id}` | Update a diagnosis's status (`ongoing` / `recovered`) |
+| `GET` | `/api/health` | Health check - reports whether the model and LLM are loaded/configured |
+ 
+---
+
 ## 🛣️ Roadmap
 
 - [x] UI mockups (English and Urdu)
