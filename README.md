@@ -10,14 +10,14 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English
 ## ✨ Features
 
 - 🌐 **Multilingual** — English and Urdu
-- 🤖 **Dual AI Diagnosis** — A scikit-learn model trained on real veterinary case data runs alongside a Groq-hosted LLM (Llama 3.3 70B), so results can be cross-checked instead of trusted blindly
+- 🤖 **Dual AI Diagnosis** — A scikit-learn model trained on real veterinary case data + a Groq-hosted LLM (Llama 3.3 70B)
 - 🧪 **Differential Diagnosis** — Shows the model's top-3 most likely diseases, not just the top pick
 - 🩺 **Symptom Picker** — Tap-to-select symptoms across organ systems, filtered by animal/age/sex
 - 📍 **Location-aware** — Collects Province, District & Tehsil for regional outbreak tracking
 - 🩹 **First Aid Guidance** — Practical, translated first-aid steps for each diagnosis
 - 📋 **Diagnosis History** — Tracks past diagnoses per animal and lets farmers mark a case as ongoing/recovered
 - 🏥 **Urgency Flagging** — Highlights when a diagnosis warrants immediate veterinary attention
-- 👤 **Farmer Profiles** — One-time registration (name, phone, Province/District/Tehsil) cached on-device so returning farmers skip re-registration
+- 👤 **Farmer Profiles** — One-time registration (name, phone, place) cached on-device so returning farmers skip re-registration
 
 ---
  
@@ -54,9 +54,9 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English
 |---|---|---|
 | Mobile App | React Native (Expo Router, Expo SDK 54) | Cross-platform Android/iOS/web app with RTL & Urdu support |
 | Backend API | FastAPI (Python) | REST API connecting the mobile app to both diagnosis sources |
-| Trained Model | scikit-learn `RandomForestClassifier` | Classifier trained on the Maweshi dataset (animal, sex, age, symptoms → disease) |
-| LLM | Groq API — Llama 3.3 70B Versatile | Independent diagnosis for comparison against the trained model, constrained to the model's disease vocabulary |
-| Database | SQLAlchemy — SQLite (local) / PostgreSQL (production) | Farmer profiles and diagnosis history |
+| Trained Model | scikit-learn *RandomForestClassifier* | Classifier trained on the Maweshi dataset (animal, sex, age, symptoms → disease) |
+| LLM | Groq API - Llama 3.3 70B Versatile | Independent diagnosis for comparison against the trained model, constrained to the model's disease vocabulary |
+| Database | SQLAlchemy - SQLite (local) / PostgreSQL (production) | Farmer profiles and diagnosis history |
 | Hosting | Render | FastAPI + trained model hosted online so the app can reach it from anywhere |
 
 ---
@@ -79,21 +79,40 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English
 ---
 
 ## 📁 Project Structure
-
+ 
 ```
-app/          Expo Router screens (index, language, registration, home, symptoms, result, history)
-components/   Shared UI components (UrduText, haptic tab bar, themed primitives)
-lib/          API clients (diagnosisApi, farmerApi), device ID, static Pakistan/symptom data
-constants/    Theme tokens
+app/                    Expo Router screens
+  index.tsx               Splash screen
+  language.tsx             Language selection (English / Urdu)
+  registration.tsx        Farmer registration (name, phone, location)
+  home.tsx                Landing screen after registration
+  symptoms.tsx             Animal/sex/age + tap-to-select symptom picker
+  result.tsx               Diagnosis result
+  history.tsx              List of past diagnoses
+  history-detail.tsx      Full record for one past diagnosis
+  profile.tsx              Farmer profile
+components/            Shared UI components
+lib/                    Frontend data/services layer
+  config.ts               API_BASE_URL
+  diagnosisApi.ts          Calls /api/diagnose
+  farmerApi.ts             Calls /api/farmers, /api/diagnoses (list/save/update status)
+  profile.ts               local cache of the farmer profile
+  deviceId.ts              Generates anonymous per-device UUID
+  pakistanData.ts          Pakistan reference data
+  symptomsData.ts          Symptom catalogue grouped by organ system (EN/UR)
+constants/              Theme tokens
 backend/
-  main.py               FastAPI app: /api/diagnose, /api/farmers, /api/diagnoses, /api/health
-  app/db.py             SQLite/Postgres setup
-  app/models.py         SQLAlchemy models (Farmer, Diagnosis)
-  app/schemas.py        Pydantic request/response schemas
-  app/disease_reference.py   Curated EN/UR disease info + first-aid fallback text
-  train_model.py        Trains & serializes the Random Forest classifier
-  model/                 Serialized pipeline, label encoder, symptom columns, metrics
-previous_work/          Earlier fine-tuning exploration, Sobaina's part
+  main.py                  FastAPI app
+  app/db.py                SQLite + Postgres setup
+  app/models.py             SQLAlchemy models (Farmer, Diagnosis)
+  app/schemas.py            Pydantic request/response schemas
+  app/disease_reference.py Curated EN/UR disease info
+  features.py               Shared feature/column definitions
+  train_model.py            Trains Random Forest classifier
+  evaluate_loo.py           Leave-one-out evaluation
+  maweshi_preprocessed.csv Preprocessed training dataset
+  model/                    Serialized pipeline
+previous_work/            Sobaina's part
 ```
 
 ---
