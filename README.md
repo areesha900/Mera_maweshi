@@ -15,10 +15,12 @@ Mera Maweshi lets a farmer describe their animal's symptoms in **Urdu or English
 - 🩺 **Symptom Picker** — Tap-to-select symptoms across organ systems, filtered by animal/age/sex
 - 📍 **Location-aware** — Collects Province, District & Tehsil for regional outbreak tracking
 - 🩹 **First Aid Guidance** — Practical, translated first-aid steps for each diagnosis
-- 📋 **Diagnosis History** — Tracks past diagnoses with animal, date, and recovery status
+- 📋 **Diagnosis History** — Tracks past diagnoses per animal and lets farmers mark a case as ongoing/recovered
 - 🏥 **Urgency Flagging** — Highlights when a diagnosis warrants immediate veterinary attention
----
+- 👤 **Farmer Profiles** — One-time registration (name, phone, Province/District/Tehsil) cached on-device so returning farmers skip re-registration
 
+---
+ 
 ## 📱 Mockups
 
 ### English Mockups
