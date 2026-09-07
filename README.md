@@ -141,5 +141,4 @@ previous_work/            Sobaina's part
 - [x] Farmer profiles & diagnosis history (SQLite locally, Postgres in production)
 - [x] Frontend + backend integration
 - [x] Backend deployed (Render)
-- [ ] Overall UI
-- [ ] Automated tests (backend + app)
+- [x] Overall UI
