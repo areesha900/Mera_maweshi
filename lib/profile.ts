@@ -1,4 +1,4 @@
-import * as SecureStore from 'expo-secure-store';
+import * as Storage from './storage';
 
 // This is the on-device cache of "who is this farmer" -- separate from
 // deviceId.ts (which is just the anonymous UUID). Once a farmer registers,
@@ -24,7 +24,7 @@ let cached: CachedProfile | null = null;
 
 export async function getLocalProfile(): Promise<CachedProfile | null> {
   if (cached) return cached;
-  const raw = await SecureStore.getItemAsync(PROFILE_KEY);
+  const raw = await Storage.getItem(PROFILE_KEY);
   if (!raw) return null;
   try {
     cached = JSON.parse(raw) as CachedProfile;
@@ -36,11 +36,11 @@ export async function getLocalProfile(): Promise<CachedProfile | null> {
 
 export async function saveLocalProfile(profile: CachedProfile): Promise<void> {
   cached = profile;
-  await SecureStore.setItemAsync(PROFILE_KEY, JSON.stringify(profile));
+  await Storage.setItem(PROFILE_KEY, JSON.stringify(profile));
 }
 
 /** Only used if you ever need to force re-registration (e.g. a "log out" / "switch farmer" option). */
 export async function clearLocalProfile(): Promise<void> {
   cached = null;
-  await SecureStore.deleteItemAsync(PROFILE_KEY);
+  await Storage.deleteItem(PROFILE_KEY);
 }

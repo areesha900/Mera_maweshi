@@ -1,4 +1,4 @@
-import * as SecureStore from 'expo-secure-store';
+import * as Storage from './storage';
 
 // This is the app's entire "account" concept -- see AGENTS/README notes.
 // No login, no phone verification. A UUID is generated once on first
@@ -29,14 +29,14 @@ function generateUuidV4(): string {
 export async function getDeviceId(): Promise<string> {
   if (cachedDeviceId) return cachedDeviceId;
 
-  const existing = await SecureStore.getItemAsync(DEVICE_ID_KEY);
+  const existing = await Storage.getItem(DEVICE_ID_KEY);
   if (existing) {
     cachedDeviceId = existing;
     return existing;
   }
 
   const fresh = generateUuidV4();
-  await SecureStore.setItemAsync(DEVICE_ID_KEY, fresh);
+  await Storage.setItem(DEVICE_ID_KEY, fresh);
   cachedDeviceId = fresh;
   return fresh;
 }
